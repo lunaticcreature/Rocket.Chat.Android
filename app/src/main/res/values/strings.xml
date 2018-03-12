@@ -260,4 +260,11 @@
     <string name="notif_action_reply_hint">REPLY</string>
     <string name="notif_error_sending">Reply has failed. Please try again.</string>
     <string name="notif_success_sending">Message sent to %1$s!</string>
+    
+    <string name="menu_chatroom_sort">Sort</string>
+    <string name="dialog_sort_title">Sort by</string>
+    <string name="dialog_sort_by_alphabet">Alphabetical</string>
+    <string name="dialog_sort_by_activity">Activity</string>
+    <string name="dialog_group_by_type">Group by type</string>
+    <string name="dialog_group_favourites">Group favourites</string>
 </resources>

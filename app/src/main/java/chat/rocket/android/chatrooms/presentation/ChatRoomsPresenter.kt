@@ -24,12 +24,14 @@ import chat.rocket.core.internal.realtime.socket.model.StreamMessage
 import chat.rocket.core.internal.realtime.socket.model.Type
 import chat.rocket.core.internal.rest.spotlight
 import chat.rocket.core.model.ChatRoom
+import chat.rocket.core.model.Message
 import chat.rocket.core.model.Room
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
 
 class ChatRoomsPresenter @Inject constructor(private val view: ChatRoomsView,
@@ -205,6 +207,10 @@ class ChatRoomsPresenter @Inject constructor(private val view: ChatRoomsView,
                 openChatRooms
             }
         }
+    }
+
+    private fun compareBy(selector: KProperty<Message?>): Comparator<ChatRoom> {
+        return Comparator { a, b -> (a.lastMessage?.timestamp!! - b.lastMessage?.timestamp!!).toInt() }
     }
 
     private fun compareBy(selector: KProperty1<ChatRoom, RoomType>): Comparator<ChatRoom> {

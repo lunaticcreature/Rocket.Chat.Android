@@ -33,6 +33,8 @@ interface AppComponent {
 
     fun inject(service: MessageService)
 
+    fun inject(broadcastReceiver: BroadcastReceiver)
+
     /*@Component.Builder
     abstract class Builder : AndroidInjector.Builder<RocketChatApplication>()*/
 }

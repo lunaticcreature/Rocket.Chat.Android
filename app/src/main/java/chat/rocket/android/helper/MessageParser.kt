@@ -21,6 +21,11 @@ import chat.rocket.android.emoji.EmojiRepository
 import chat.rocket.android.emoji.EmojiTypefaceSpan
 import chat.rocket.common.model.SimpleUser
 import chat.rocket.core.model.Message
+import chat.rocket.android.chatroom.viewmodel.MessageViewModel
+import chat.rocket.android.customtab.CustomTabHelper
+import chat.rocket.android.widget.emoji.EmojiParser
+import chat.rocket.android.widget.emoji.EmojiRepository
+import chat.rocket.android.widget.emoji.EmojiTypefaceSpan
 import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.Document
 import org.commonmark.node.Text
@@ -151,7 +156,9 @@ class MessageParser @Inject constructor(
                 if (!link.startsWith("@") && link !in consumed) {
                     builder.setSpan(object : ClickableSpan() {
                         override fun onClick(view: View) {
-                            view.openTabbedUrl(getUri(link))
+                            with (view) {
+                                CustomTabHelper.openCustomTab(context, getUri(link))
+                            }
                         }
                     }, matcher.start(0), matcher.end(0))
                     consumed.add(link)

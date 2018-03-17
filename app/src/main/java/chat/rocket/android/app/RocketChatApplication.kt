@@ -25,6 +25,7 @@ import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.drawee.backends.pipeline.DraweeConfig
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
+import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -79,6 +80,8 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
             .application(this)
             .build()
             .inject(this)
+
+        Stetho.initializeWithDefaults(this)
 
         ProcessLifecycleOwner.get()
             .lifecycle

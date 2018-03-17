@@ -115,6 +115,9 @@ dependencies {
     implementation libraries.markwon
 
     implementation libraries.aVLoadingIndicatorView
+    implementation libraries.stetho
+    
+    implementation 'com.android.support:customtabs:27.0.2'
 
     implementation "com.github.luciofm:livedata-ktx:b1e8bbc25a"
 

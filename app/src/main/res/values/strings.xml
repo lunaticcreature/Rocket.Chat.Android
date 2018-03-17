@@ -275,4 +275,7 @@
     <string name="header_direct_messages">Direct Messages</string>
     <string name="header_live_chats">Live Chats</string>
     <string name="header_unknown">Unknown</string>
+    
+    <string name="customtab_bookmark_label">Bookmark</string>
+
 </resources>

@@ -270,4 +270,6 @@
     <string name="dialog_group_by_type">Agrupar por tipo</string>
     <string name="dialog_group_favourites">Grupos favoritos</string>
     <string name="chatroom_header">Cabeçalho</string>
+
+    <string name="customtab_bookmark_label">marca páginas</string>
 </resources>

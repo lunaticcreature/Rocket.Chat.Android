@@ -31,6 +31,7 @@ import chat.rocket.common.internal.ISO8601Date
 import chat.rocket.common.model.TimestampAdapter
 import chat.rocket.common.util.CalendarISO8601Converter
 import chat.rocket.common.util.Logger
+import chat.rocket.android.room.weblink.WebLinkDao
 import chat.rocket.common.util.PlatformLogger
 import chat.rocket.core.RocketChatClient
 import chat.rocket.core.internal.AttachmentAdapterFactory
@@ -91,6 +92,12 @@ class AppModule {
     @Singleton
     fun provideServerDao(database: RocketChatDatabase): ServerDao {
         return database.serverDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebLinkDao(database: RocketChatDatabase): WebLinkDao {
+        return database.webLinkDao()
     }
 
     @Provides

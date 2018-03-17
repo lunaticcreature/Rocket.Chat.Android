@@ -31,6 +31,7 @@ import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.drawee.backends.pipeline.DraweeConfig
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.core.ImagePipelineConfig
+import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.android.*
 import io.fabric.sdk.android.Fabric
@@ -43,9 +44,7 @@ import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-
-class RocketChatApplication : Application(), HasActivityInjector, HasServiceInjector,
-        HasBroadcastReceiverInjector {
+class RocketChatApplication : Application(), HasActivityInjector, HasServiceInjector, HasBroadcastReceiverInjector {
 
     @Inject
     lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -85,6 +84,7 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
         super.onCreate()
 
         DaggerAppComponent.builder().application(this).build().inject(this)
+        Stetho.initializeWithDefaults(this)
 
         // TODO - remove this on the future, temporary migration stuff for pre-release versions.
         migrateInternalTokens()
@@ -258,11 +258,11 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
     override fun serviceInjector(): AndroidInjector<Service> {
         return serviceDispatchingAndroidInjector
     }
-
+    
     override fun broadcastReceiverInjector(): AndroidInjector<BroadcastReceiver> {
-        return broadcastReceiverInjector
+        return broadcastReceiverDispatchingAndroidInjector
     }
-
+    
     companion object {
         var context: WeakReference<Context>? = null
         fun getAppContext(): Context? {

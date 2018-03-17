@@ -202,4 +202,6 @@
     <string name="header_direct_messages">Mensagens diretas</string>
     <string name="header_live_chats">Live Chats</string>
     <string name="header_unknown">Desconhecido</string>
+
+    <string name="customtab_bookmark_label">marca páginas</string>
 </resources>

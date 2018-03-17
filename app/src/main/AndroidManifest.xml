@@ -114,6 +114,8 @@
         <activity
             android:name=".settings.about.ui.AboutActivity"
             android:theme="@style/AppTheme" />
+
+        <receiver android:name=".customtab.ActionBroadcastReceiver" />
     </application>
 
 </manifest>

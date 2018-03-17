@@ -202,6 +202,9 @@ class MainActivity : AppCompatActivity(), MainView, HasActivityInjector,
 
     private fun onNavDrawerItemSelected(menuItem: MenuItem) {
         when (menuItem.itemId) {
+            R.id.action_web_links -> {
+                presenter.toWebLinksList()
+            }
             R.id.action_chat_rooms -> {
                 presenter.toChatList()
             }

@@ -27,6 +27,7 @@ import chat.rocket.android.server.ui.ChangeServerActivity
 import chat.rocket.android.settings.di.SettingsFragmentProvider
 import chat.rocket.android.settings.password.di.PasswordFragmentProvider
 import chat.rocket.android.settings.password.ui.PasswordActivity
+import chat.rocket.android.weblinks.di.WebLinksFragmentProvider
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -52,7 +53,8 @@ abstract class ActivityBuilder {
             ChatRoomsFragmentProvider::class,
             CreateChannelProvider::class,
             ProfileFragmentProvider::class,
-            SettingsFragmentProvider::class
+            SettingsFragmentProvider::class,
+            WebLinksFragmentProvider::class
         ]
     )
     abstract fun bindMainActivity(): MainActivity

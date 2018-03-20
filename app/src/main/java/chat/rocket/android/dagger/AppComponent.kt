@@ -9,6 +9,7 @@ import chat.rocket.android.dagger.module.AppModule
 import chat.rocket.android.dagger.module.ReceiverBuilder
 import chat.rocket.android.dagger.module.ServiceBuilder
 import chat.rocket.android.push.FirebaseTokenService
+import chat.rocket.android.weblinks.ui.WebLinksAdapter
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
@@ -34,6 +35,8 @@ interface AppComponent {
     fun inject(service: MessageService)
 
     fun inject(broadcastReceiver: BroadcastReceiver)
+
+    fun inject(webLinksAdapter: WebLinksAdapter)
 
     /*@Component.Builder
     abstract class Builder : AndroidInjector.Builder<RocketChatApplication>()*/

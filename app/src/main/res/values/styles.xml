@@ -101,6 +101,16 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="WebLink.TextView.Description" parent="android:TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="WebLink.TextView.Link" parent="android:TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
     <style name="Timestamp.TextView" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textSize">10sp</item>
     </style>

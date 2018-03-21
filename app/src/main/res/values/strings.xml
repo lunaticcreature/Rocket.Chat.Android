@@ -197,6 +197,14 @@
     <string name="notif_action_reply_hint">REPLY</string>
     <string name="notif_error_sending">Reply has failed. Please try again.</string>
     <string name="notif_success_sending">Message sent to %1$s!</string>
+    
+    <!--Web links-->
     <string name="customtab_bookmark_label">Bookmark</string>
+    <string name="added_bookmark">Added bookmark</string>
+    <string name="removed_bookmark">Removed Bookmark</string>
+    <string name="url_preview_image">Image</string>
+    <string name="url_preview_title">Web chat</string>
+    <string name="url_preview_description">Description</string>
+    <string name="url_preview_link">Link</string>
 
 </resources>

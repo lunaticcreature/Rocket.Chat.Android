@@ -7,7 +7,8 @@ import chat.rocket.android.chatroom.uimodel.UrlPreviewUiModel
 import chat.rocket.android.util.extensions.openTabbedUrl
 import chat.rocket.android.emoji.EmojiReactionListener
 import chat.rocket.android.chatroom.viewmodel.UrlPreviewViewModel
-import chat.rocket.android.customtab.CustomTabHelper
+import chat.rocket.android.customtab.CustomTab
+import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.util.extensions.content
 import kotlinx.android.synthetic.main.message_url_preview.view.*
 

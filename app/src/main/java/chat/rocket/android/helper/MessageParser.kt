@@ -22,7 +22,8 @@ import chat.rocket.android.emoji.EmojiTypefaceSpan
 import chat.rocket.common.model.SimpleUser
 import chat.rocket.core.model.Message
 import chat.rocket.android.chatroom.viewmodel.MessageViewModel
-import chat.rocket.android.customtab.CustomTabHelper
+import chat.rocket.android.customtab.CustomTab
+import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.widget.emoji.EmojiParser
 import chat.rocket.android.widget.emoji.EmojiRepository
 import chat.rocket.android.widget.emoji.EmojiTypefaceSpan
@@ -33,6 +34,7 @@ import ru.noties.markwon.Markwon
 import ru.noties.markwon.SpannableBuilder
 import ru.noties.markwon.SpannableConfiguration
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 class MessageParser @Inject constructor(
@@ -157,7 +159,7 @@ class MessageParser @Inject constructor(
                     builder.setSpan(object : ClickableSpan() {
                         override fun onClick(view: View) {
                             with (view) {
-                                CustomTabHelper.openCustomTab(context, getUri(link))
+                                CustomTab.openCustomTab(context, getUri(link), WebViewFallback())
                             }
                         }
                     }, matcher.start(0), matcher.end(0))

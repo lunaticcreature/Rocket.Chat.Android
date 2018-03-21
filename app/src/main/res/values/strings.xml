@@ -277,6 +277,13 @@
     <string name="header_live_chats">Live Chats</string>
     <string name="header_unknown">Unknown</string>
     
+    <!--Web links-->
     <string name="customtab_bookmark_label">Bookmark</string>
+    <string name="added_bookmark">Added bookmark</string>
+    <string name="removed_bookmark">Removed Bookmark</string>
+    <string name="url_preview_image">Image</string>
+    <string name="url_preview_title">Web chat</string>
+    <string name="url_preview_description">Description</string>
+    <string name="url_preview_link">Link</string>
 
 </resources>

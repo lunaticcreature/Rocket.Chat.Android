@@ -6,6 +6,8 @@ import androidx.core.view.isVisible
 import chat.rocket.android.chatroom.uimodel.UrlPreviewUiModel
 import chat.rocket.android.util.extensions.openTabbedUrl
 import chat.rocket.android.emoji.EmojiReactionListener
+import chat.rocket.android.chatroom.viewmodel.UrlPreviewViewModel
+import chat.rocket.android.customtab.CustomTabHelper
 import chat.rocket.android.util.extensions.content
 import kotlinx.android.synthetic.main.message_url_preview.view.*
 
@@ -42,6 +44,7 @@ class UrlPreviewViewHolder(itemView: View,
 
     private val onClickListener = { view: View ->
         if (data != null) {
+            //CustomTabHelper.openCustomTab(context, Uri.parse(data.rawData.url))
             view.openTabbedUrl(Uri.parse(data!!.rawData.url))
         }
     }

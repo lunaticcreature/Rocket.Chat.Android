@@ -16,6 +16,7 @@ import chat.rocket.android.util.extensions.addFragment
 import chat.rocket.android.util.extensions.textContent
 import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.roomTypeOf
+import com.r0adkll.slidr.Slidr
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -121,6 +122,8 @@ class ChatRoomActivity : AppCompatActivity(), HasSupportFragmentInjector {
                 )
             }
         }
+
+        Slidr.attach(this)
     }
 
     override fun onBackPressed() {

@@ -122,6 +122,7 @@ dependencies {
     implementation libraries.customtab
     implementation libraries.jsoup
     implementation libraries.linkpreview
+    implementation libraries.slider
 
     implementation "com.github.luciofm:livedata-ktx:b1e8bbc25a"
 

@@ -163,6 +163,7 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
 
     companion object {
         var context: WeakReference<Context>? = null
+
         fun getAppContext(): Context? {
             return context?.get()
         }

@@ -136,19 +136,7 @@ class MessageParser @Inject constructor(val context: Application, private val co
                     builder.setSpan(object : ClickableSpan() {
                         override fun onClick(view: View) {
                             with (view) {
-                                Timber.d("$link")
-                                if (link.startsWith("http://www.requiresinternet.com")) {
-                                    val layout = LayoutInflater.from(context).inflate(R.layout.custom_toast, findViewById(R.id.custom_toast_container))
-                                    val text = layout.findViewById<TextView>(R.id.text)
-                                    text.setText("Please credit your Viasat account to access this page")
-                                    val toast =  Toast(context)
-                                    toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
-                                    toast.setDuration(Toast.LENGTH_LONG)
-                                    toast.setView(layout)
-                                    toast.show()
-                                } else {
-                                    CustomTab.openCustomTab(context, getUri(link), WebViewFallback())
-                                }
+                                CustomTab.openCustomTab(context, link, WebViewFallback())
                             }
                         }
                     }, matcher.start(0), matcher.end(0))

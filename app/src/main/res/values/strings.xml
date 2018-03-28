@@ -10,7 +10,8 @@
     <string name="title_authentication">Authentication</string>
     <string name="title_legal_terms">Legal Terms</string>
     <string name="title_web_links">Web Links</string>
-    <string name="title_chats">Chats</string>
+    <string name="title_chats">Veranda</string>
+    <string name="title_home">Home</string>
     <string name="title_profile">Profile</string>
     <string name="title_members">Members (%d)</string>
     <string name="title_settings">Settings</string>

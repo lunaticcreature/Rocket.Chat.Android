@@ -3,7 +3,6 @@ package chat.rocket.android.chatrooms.ui
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -27,6 +26,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.*
 import android.widget.CheckBox
@@ -330,7 +330,6 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     private fun setupToolbar() {
         (activity as AppCompatActivity?)?.supportActionBar?.title = getString(R.string.title_chats)
     }
-
 
     private fun setUpWebSearch() {
         //val link = "http://bizzbyster.github.io/search/"

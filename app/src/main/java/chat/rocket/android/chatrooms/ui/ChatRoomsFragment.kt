@@ -26,9 +26,13 @@ import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.infrastructure.LocalRepository
+import chat.rocket.android.room.weblink.WebLinkEntity
 import chat.rocket.android.server.domain.GetCurrentServerInteractor
 import chat.rocket.android.server.domain.SettingsRepository
 import chat.rocket.android.util.extensions.*
+import chat.rocket.android.weblinks.presentation.WebLinksPresenter
+import chat.rocket.android.weblinks.presentation.WebLinksView
+import chat.rocket.android.weblinks.ui.WebLinksAdapter
 import chat.rocket.android.webview.weblink.ui.webViewIntent
 import chat.rocket.android.widget.DividerItemDecoration
 import chat.rocket.common.model.RoomType
@@ -55,6 +59,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     @Inject lateinit var serverInteractor: GetCurrentServerInteractor
     @Inject lateinit var settingsRepository: SettingsRepository
     @Inject lateinit var localRepository: LocalRepository
+    @Inject lateinit var webLinksPresenter: WebLinksPresenter
+
     private lateinit var preferences: SharedPreferences
     private var searchView: SearchView? = null
     private val handler = Handler()
@@ -86,8 +92,15 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
 
         setupToolbar()
         setupRecyclerView()
-        setUpWebSearch()
+        setupWebLinksRecyclerView()
+        setupWebSearch()
+        setupWebLinksExpandButton()
         presenter.loadChatRooms()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        webLinksPresenter.loadWebLinks()
     }
 
     override fun onDestroyView() {
@@ -240,6 +253,22 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
         }
     }
 
+    override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
+        activity?.apply {
+            listJob?.cancel()
+            listJob = launch(UI) {
+                val adapter = web_links_recycler_view.adapter as WebLinksAdapter
+                if (isActive) {
+                    adapter.updateWebLinks(newDataSet)
+                }
+            }
+        }
+    }
+
+    override fun showNoWebLinksToDisplay() {
+        //Do nothing
+    }
+
     private fun setupToolbar() {
         (activity as AppCompatActivity?)?.supportActionBar?.title = getString(R.string.title_chats)
     }
@@ -261,6 +290,37 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
             sectionedAdapter = SimpleSectionedRecyclerViewAdapter(it,
                     R.layout.item_chatroom_header, R.id.text_chatroom_header, baseAdapter)
             recycler_view.adapter = sectionedAdapter
+        }
+    }
+
+    private fun setupWebLinksRecyclerView() {
+        activity?.apply {
+            web_links_recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            web_links_recycler_view.addItemDecoration(DividerItemDecoration(this,
+                    resources.getDimensionPixelSize(R.dimen.divider_item_decorator_bound_start),
+                    resources.getDimensionPixelSize(R.dimen.divider_item_decorator_bound_end)))
+            web_links_recycler_view.itemAnimator = DefaultItemAnimator()
+
+            web_links_recycler_view.adapter = WebLinksAdapter(this,
+                    { webLink ->
+                        run {
+                            startActivity(this.webViewIntent(webLink.link, if (!webLink.title.isEmpty()) webLink.title else resources.getString(R.string.url_preview_title)))
+                        }
+                    })
+        }
+    }
+
+    private fun setupWebLinksExpandButton() {
+        web_links_expand_button.setOnClickListener {
+            if (web_links_recycler_view.isVisible()) {
+                web_links_expand_button.setImageResource(R.drawable.ic_arrow_drop_down_black)
+                web_links_recycler_view.visibility = View.GONE
+                divider_web_links.visibility = View.GONE
+            } else {
+                web_links_expand_button.setImageResource(R.drawable.ic_arrow_drop_up_black)
+                web_links_recycler_view.visibility = View.VISIBLE
+                divider_web_links.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -296,7 +356,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
         sectionedAdapter?.setSections(sections.toArray(dummy))
     }
 
-    private fun setUpWebSearch() {
+    private fun setupWebSearch() {
         //val link = "http://bizzbyster.github.io/search/"
 
         val title = SharedPreferenceHelper.getString("web_search_title", "Web Search")

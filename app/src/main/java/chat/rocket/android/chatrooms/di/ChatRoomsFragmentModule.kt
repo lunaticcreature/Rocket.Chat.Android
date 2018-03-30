@@ -18,6 +18,7 @@ import chat.rocket.android.server.infraestructure.ConnectionManager
 import chat.rocket.android.server.infraestructure.ConnectionManagerFactory
 import chat.rocket.android.server.infraestructure.RocketChatClientFactory
 import chat.rocket.core.RocketChatClient
+import chat.rocket.android.weblinks.presentation.WebLinksView
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -28,6 +29,11 @@ class ChatRoomsFragmentModule {
     @Provides
     @PerFragment
     fun chatRoomsView(frag: ChatRoomsFragment): ChatRoomsView {
+        return frag
+    }
+
+    @Provides
+    fun webLinksView(frag: ChatRoomsFragment): WebLinksView {
         return frag
     }
 

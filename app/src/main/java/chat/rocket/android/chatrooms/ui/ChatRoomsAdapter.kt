@@ -85,14 +85,14 @@ class ChatRoomsAdapter(private val context: Context,
 
             val drawable = when (chatRoom.type) {
                 is RoomType.Channel -> {
-                    DrawableHelper.getDrawableFromId(R.drawable.ic_room_channel, context)
+                    DrawableHelper.getDrawableFromId(R.drawable.ic_megaphone, context)
                 }
                 is RoomType.PrivateGroup -> {
-                    DrawableHelper.getDrawableFromId(R.drawable.ic_room_lock, context)
+                    DrawableHelper.getDrawableFromId(R.drawable.ic_community, context)
                 }
-                is RoomType.DirectMessage -> {
-                    DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, context)
-                }
+                // is RoomType.DirectMessage -> {
+                //    DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, context)
+                //}
                 else -> null
             }
 

@@ -359,10 +359,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     private fun setupWebSearch() {
         //val link = "http://bizzbyster.github.io/search/"
 
-        val title = SharedPreferenceHelper.getString("web_search_title", "Web Search")
-        val description = SharedPreferenceHelper.getString("web_search_desc", "Description")
-        val imageUrl = SharedPreferenceHelper.getString("web_search_image", "")
-        val link = SharedPreferenceHelper.getString("web_search_link", "https://bizzbyster.github.io/search/")
+        val title = SharedPreferenceHelper.getString("web_search_title", "Internet Search")
+        val description = SharedPreferenceHelper.getString("web_search_desc", "Faster web with the Viasat Browser")
+        val imageUrl = SharedPreferenceHelper.getString("web_search_image", "http://www.verandaweb.com/search/browser.png")
+        val link = SharedPreferenceHelper.getString("web_search_link", "https://www.google.com")
 
         updateUI(title, text_title,
                 description, text_description,
@@ -404,8 +404,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
                 }
             }
         }
-        val textCrawler = TextCrawler()
-        textCrawler.makePreview(linkPreviewCallback, link)
+//        val textCrawler = TextCrawler()
+//        textCrawler.makePreview(linkPreviewCallback, link)
     }
 
     private fun updateUI(title: String, textViewTitle: TextView,

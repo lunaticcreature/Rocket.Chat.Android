@@ -21,6 +21,7 @@ import chat.rocket.android.R
 import chat.rocket.android.chatroom.viewmodel.MessageViewModel
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
+import chat.rocket.android.helper.ToastHelper
 import chat.rocket.android.widget.emoji.EmojiParser
 import chat.rocket.android.widget.emoji.EmojiRepository
 import chat.rocket.android.widget.emoji.EmojiTypefaceSpan
@@ -36,9 +37,8 @@ import ru.noties.markwon.renderer.SpannableMarkdownVisitor
 import timber.log.Timber
 import java.util.regex.Pattern
 import javax.inject.Inject
-import android.widget.Toast
 import android.widget.TextView
-import timber.log.Timber
+import android.widget.Toast
 
 class MessageParser @Inject constructor(val context: Application, private val configuration: SpannableConfiguration) {
 
@@ -136,7 +136,13 @@ class MessageParser @Inject constructor(val context: Application, private val co
                     builder.setSpan(object : ClickableSpan() {
                         override fun onClick(view: View) {
                             with (view) {
-                                CustomTab.openCustomTab(context, link, WebViewFallback())
+                                if (link.startsWith("http://www.requiresinternet.com")) {
+                                    ToastHelper.showCustomToast(context,
+                                            "Can I help you get access to this content?",
+                                            this)
+                                } else {
+                                    CustomTab.openCustomTab(context, link, WebViewFallback())
+                                }
                             }
                         }
                     }, matcher.start(0), matcher.end(0))

@@ -111,14 +111,14 @@ class ChatRoomActivity : AppCompatActivity(), HasSupportFragmentInjector {
         val roomType = roomTypeOf(chatRoomType)
         val drawable = when (roomType) {
             is RoomType.Channel -> {
-                DrawableHelper.getDrawableFromId(R.drawable.ic_room_channel, this)
+                DrawableHelper.getDrawableFromId(R.drawable.ic_megaphone, this)
             }
             is RoomType.PrivateGroup -> {
-                DrawableHelper.getDrawableFromId(R.drawable.ic_room_lock, this)
+                DrawableHelper.getDrawableFromId(R.drawable.ic_community, this)
             }
-            is RoomType.DirectMessage -> {
-                DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, this)
-            }
+            //is RoomType.DirectMessage -> {
+            //    DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, this)
+            //}
             else -> null
         }
 

@@ -90,9 +90,9 @@ class ChatRoomsAdapter(private val context: Context,
                 is RoomType.PrivateGroup -> {
                     DrawableHelper.getDrawableFromId(R.drawable.ic_community, context)
                 }
-                // is RoomType.DirectMessage -> {
-                //    DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, context)
-                //}
+                is RoomType.DirectMessage -> {
+                    DrawableHelper.getDrawableFromId(R.drawable.ic_sq_blank, context)
+                }
                 else -> null
             }
 

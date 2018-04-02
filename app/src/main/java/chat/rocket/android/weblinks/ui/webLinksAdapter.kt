@@ -46,6 +46,11 @@ class WebLinksAdapter(private val context: Context,
         notifyDataSetChanged()
     }
 
+    fun clearData(){
+        dataSet.clear()
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private lateinit var webLinkEntity: WebLinkEntity

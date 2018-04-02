@@ -34,7 +34,6 @@ import kotlinx.coroutines.experimental.runBlocking
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
-import timber.log.Timber
 
 fun Context.webViewIntent(webPageUrl: String, title: String = "Web Chat"): Intent {
     return Intent(this, WebViewActivity::class.java).apply {
@@ -132,18 +131,17 @@ class WebViewActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 if (request?.url.toString().startsWith("https://www.google.com/search", ignoreCase = true))
                     return false
-// Uncomment to demo Persy facilitating paid access for clicking in search results
-//                if (request?.url.toString().startsWith("https://www.washingtonpost.com", ignoreCase = true)) {
-//                    val layout = LayoutInflater.from(view?.context).inflate(R.layout.custom_toast, findViewById(R.id.custom_toast_container))
-//                    val text = layout.findViewById<TextView>(R.id.text)
-//                    text.setText("Can I help you get access to this content?")
-//                    val toast =  Toast(view?.context)
-//                    toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
-//                    toast.setDuration(Toast.LENGTH_LONG)
-//                    toast.setView(layout)
-//                    toast.show()
-//                    return true
-//                }
+                if (request?.url.toString().startsWith("https://www.aa.com", ignoreCase = true)) {
+                    val layout = LayoutInflater.from(view?.context).inflate(R.layout.custom_toast, findViewById(R.id.custom_toast_container))
+                    val text = layout.findViewById<TextView>(R.id.text)
+                    text.setText("Can I help you get access to this content?")
+                    val toast =  Toast(view?.context)
+                    toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+                    toast.setDuration(Toast.LENGTH_LONG)
+                    toast.setView(layout)
+                    toast.show()
+                    return true
+                }
                 return isNewUrl(request?.url.toString())
             }
         }

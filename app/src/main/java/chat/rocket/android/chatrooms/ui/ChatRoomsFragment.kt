@@ -236,6 +236,11 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
+
+        if (!newDataSet.isEmpty()){
+            web_links_expand_button.visibility = View.VISIBLE
+        }
+
         activity?.apply {
             listJob?.cancel()
             listJob = launch(UI) {
@@ -248,7 +253,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override fun showNoWebLinksToDisplay() {
-        //Do nothing
+        val adapter = web_links_recycler_view.adapter as WebLinksAdapter
+        adapter.clearData()
+        web_links_expand_button.visibility = View.GONE
+        divider_web_links.visibility = View.GONE
     }
 
     private fun setupToolbar() {
@@ -338,10 +346,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     private fun setupWebSearch() {
         //val link = "http://bizzbyster.github.io/search/"
 
-        val title = SharedPreferenceHelper.getString("web_search_title", "Web Search")
-        val description = SharedPreferenceHelper.getString("web_search_desc", "Description")
-        val imageUrl = SharedPreferenceHelper.getString("web_search_image", "")
-        val link = SharedPreferenceHelper.getString("web_search_link", "https://bizzbyster.github.io/search/")
+        val title = SharedPreferenceHelper.getString("web_search_title", "Internet Search")
+        val description = SharedPreferenceHelper.getString("web_search_desc", "Faster web with the Viasat Browser")
+        val imageUrl = SharedPreferenceHelper.getString("web_search_image", "http://www.verandaweb.com/search/browser.png")
+        val link = SharedPreferenceHelper.getString("web_search_link", "https://www.google.com")
 
         updateUI(title, text_title,
                 description, text_description,
@@ -383,8 +391,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                 }
             }
         }
-        val textCrawler = TextCrawler()
-        textCrawler.makePreview(linkPreviewCallback, link)
+//        val textCrawler = TextCrawler()
+//        textCrawler.makePreview(linkPreviewCallback, link)
     }
 
     private fun updateUI(title: String, textViewTitle: TextView,

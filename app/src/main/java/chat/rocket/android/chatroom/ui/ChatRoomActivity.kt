@@ -148,11 +148,14 @@ class ChatRoomActivity : AppCompatActivity(), HasSupportFragmentInjector {
     fun showToolbarChatRoomIcon(chatRoomType: String) {
         val drawable = when (roomTypeOf(chatRoomType)) {
             is RoomType.Channel -> {
-                DrawableHelper.getDrawableFromId(R.drawable.ic_hashtag_black_12dp, this)
+                DrawableHelper.getDrawableFromId(R.drawable.ic_megaphone, this)
             }
             is RoomType.PrivateGroup -> {
-                DrawableHelper.getDrawableFromId(R.drawable.ic_lock_black_12_dp, this)
+                DrawableHelper.getDrawableFromId(R.drawable.ic_community, this)
             }
+            //is RoomType.DirectMessage -> {
+            //    DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, this)
+            //}
             else -> null
         }
 

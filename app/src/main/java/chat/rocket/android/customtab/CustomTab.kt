@@ -10,7 +10,7 @@ import android.support.v4.content.res.ResourcesCompat
 import chat.rocket.android.R
 
 object CustomTab {
-    fun openCustomTab(context: Context, url: String, fallback: CustomTabFallback?) {
+    fun openCustomTab(context: Context, url: String, fallback: CustomTabFallback?, setBackButton: Boolean = false) {
 
         val uri = Uri.parse(CustomTabsHelper.convertSchemeToLower(url))
 
@@ -23,6 +23,11 @@ object CustomTab {
         val pendingIntent = createPendingIntent(context, ActionBroadcastReceiver.ACTION_ACTION_BUTTON)
         customTabIntentBuilder.setActionButton(icon, actionLabel, pendingIntent)
         customTabIntentBuilder.addDefaultShareMenuItem()
+        customTabIntentBuilder.setShowTitle(true)
+
+        if (setBackButton) {
+            customTabIntentBuilder.setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_arrow_back))
+        }
 
         val customTabIntent = customTabIntentBuilder.build()
         val packageName = CustomTabsHelper.getPackageNameToUse(context)

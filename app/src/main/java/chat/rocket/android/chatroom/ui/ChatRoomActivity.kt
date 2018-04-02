@@ -135,7 +135,19 @@ class ChatRoomActivity : AppCompatActivity(), HasSupportFragmentInjector {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         text_room_name.textContent = chatRoomName
 
-        showRoomTypeIcon(true)
+        val roomType = roomTypeOf(chatRoomType)
+        val drawable = when (roomType) {
+            is RoomType.Channel -> {
+                DrawableHelper.getDrawableFromId(R.drawable.ic_megaphone, this)
+            }
+            is RoomType.PrivateGroup -> {
+                DrawableHelper.getDrawableFromId(R.drawable.ic_community, this)
+            }
+            //is RoomType.DirectMessage -> {
+            //    DrawableHelper.getDrawableFromId(R.drawable.ic_room_dm, this)
+            //}
+            else -> null
+        }
 
         toolbar.setNavigationOnClickListener {
             finishActivity()

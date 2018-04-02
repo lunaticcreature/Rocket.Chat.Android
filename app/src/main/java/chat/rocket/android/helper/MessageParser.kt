@@ -30,6 +30,7 @@ import chat.rocket.core.model.Message
 import chat.rocket.android.chatroom.viewmodel.MessageViewModel
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
+import chat.rocket.android.helper.ToastHelper
 import chat.rocket.android.widget.emoji.EmojiParser
 import chat.rocket.android.widget.emoji.EmojiRepository
 import chat.rocket.android.widget.emoji.EmojiTypefaceSpan
@@ -42,9 +43,8 @@ import ru.noties.markwon.SpannableConfiguration
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor
 import java.util.regex.Pattern
 import javax.inject.Inject
-import android.widget.Toast
 import android.widget.TextView
-import timber.log.Timber
+import android.widget.Toast
 
 class MessageParser @Inject constructor(
     private val context: Application,
@@ -170,14 +170,9 @@ class MessageParser @Inject constructor(
                             with (view) {
                                 Timber.d("$link")
                                 if (link.startsWith("http://www.requiresinternet.com")) {
-                                    val layout = LayoutInflater.from(context).inflate(R.layout.custom_toast, findViewById(R.id.custom_toast_container))
-                                    val text = layout.findViewById<TextView>(R.id.text)
-                                    text.setText("Can I help you get access to this content?")
-                                    val toast =  Toast(context)
-                                    toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
-                                    toast.setDuration(Toast.LENGTH_LONG)
-                                    toast.setView(layout)
-                                    toast.show()
+                                    ToastHelper.showCustomToast(context,
+                                            "Can I help you get access to this content?",
+                                            this)
                                 } else {
                                     CustomTab.openCustomTab(context, getUri(link), WebViewFallback())
                                 }

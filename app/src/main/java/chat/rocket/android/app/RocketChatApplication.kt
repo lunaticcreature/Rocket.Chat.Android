@@ -107,40 +107,13 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
         }
     }
 
-    private fun migrateFromLegacy() {
-        Realm.init(this)
-        val serveListConfiguration = RealmConfiguration.Builder()
-                .name("server.list.realm")
-                .schemaVersion(6)
-                .migration(RealmMigration())
-                .modules(RocketChatServerModule())
-                .build()
-
-        val serverRealm = Realm.getInstance(serveListConfiguration)
-        val serversInfoList = serverRealm.where(RealmBasedServerInfo::class.java).findAll().toList()
-        serversInfoList.forEach { server ->
-            val hostname = server.hostname
-            val url = if (server.insecure) "http://$hostname" else "https://$hostname"
-
-            val config = RealmConfiguration.Builder()
-                    .name("${server.hostname}.realm")
-                    .schemaVersion(6)
-                    .migration(RealmMigration())
-                    .modules(RocketChatLibraryModule())
-                    .build()
-
-            val realm = Realm.getInstance(config)
-            val user = realm.where(RealmUser::class.java)
-                    .isNotEmpty(RealmUser.EMAILS).findFirst()
-            val session = realm.where(RealmSession::class.java).findFirst()
-
-            migratePublicSettings(url, realm)
-            if (user != null && session != null) {
-                val authToken = session.token
-                settingsRepository.get(url)
-                migrateServerInfo(url, authToken!!, settingsRepository.get(url), user)
-            }
-            realm.close()
+    // TODO - remove this when we have a proper service handling connection...
+    private fun initCurrentServer() {
+        val currentServer = getCurrentServerInteractor.get()
+        val serverToken = currentServer?.let { multiServerRepository.get(currentServer) }
+        val settings = currentServer?.let { settingsRepository.get(currentServer) }
+        if (currentServer != null && serverToken != null && settings != null) {
+            tokenRepository.save(Token(serverToken.userId, serverToken.authToken)   )
         }
         migrateCurrentServer(serversInfoList)
         serverRealm.close()

@@ -19,6 +19,8 @@ import android.widget.TextView
 import chat.rocket.android.R
 import chat.rocket.android.chatrooms.presentation.ChatRoomsPresenter
 import chat.rocket.android.chatrooms.presentation.ChatRoomsView
+import chat.rocket.android.customtab.CustomTab
+import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
 import chat.rocket.android.helper.SharedPreferenceHelper
@@ -254,6 +256,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
+        if (!newDataSet.isEmpty()){
+            web_links_expand_button.visibility = View.VISIBLE
+        }
+
         activity?.apply {
             listJob?.cancel()
             listJob = launch(UI) {
@@ -266,7 +272,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     }
 
     override fun showNoWebLinksToDisplay() {
-        //Do nothing
+        val adapter = web_links_recycler_view.adapter as WebLinksAdapter
+        adapter.clearData()
+        web_links_expand_button.visibility = View.GONE
+        divider_web_links.visibility = View.GONE
     }
 
     private fun setupToolbar() {
@@ -370,7 +379,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
                 link, text_link)
 
         web_search.setOnClickListener({
-            startActivity(this.activity?.webViewIntent(link, if (!title.isEmpty()) title else resources.getString(R.string.url_preview_title)))
+            CustomTab.openCustomTab(context!!, link, WebViewFallback(), true)
+            //startActivity(this.activity?.webViewIntent(link, if (!title.isEmpty()) title else resources.getString(R.string.url_preview_title)))
         })
 
         val linkPreviewCallback = object : LinkPreviewCallback {

@@ -177,8 +177,7 @@ class MessageParser @Inject constructor(val context: Application, private val co
                             with (view) {
                                 if (link.startsWith("http://www.requiresinternet.com")) {
                                     ToastHelper.showCustomToast(context,
-                                            "Can I help you get access to this content?",
-                                            this)
+                                            "Can I help you get access to this content?")
                                 } else {
                                     CustomTab.openCustomTab(context, link, WebViewFallback())
                                 }

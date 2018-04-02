@@ -18,6 +18,7 @@ import chat.rocket.android.app.RocketChatApplication
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.dagger.DaggerAppComponent
+import chat.rocket.android.helper.ToastHelper
 import chat.rocket.android.helper.UrlHelper
 import chat.rocket.android.room.weblink.WebLinkDao
 import chat.rocket.android.room.weblink.WebLinkEntity
@@ -132,14 +133,8 @@ class WebViewActivity : AppCompatActivity() {
                 if (request?.url.toString().startsWith("https://www.google.com/search", ignoreCase = true))
                     return false
                 if (request?.url.toString().startsWith("https://www.aa.com", ignoreCase = true)) {
-                    val layout = LayoutInflater.from(view?.context).inflate(R.layout.custom_toast, findViewById(R.id.custom_toast_container))
-                    val text = layout.findViewById<TextView>(R.id.text)
-                    text.setText("Can I help you get access to this content?")
-                    val toast =  Toast(view?.context)
-                    toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
-                    toast.setDuration(Toast.LENGTH_LONG)
-                    toast.setView(layout)
-                    toast.show()
+                    ToastHelper.showCustomToast(view?.context,
+                            "Can I help you get access to this content?")
                     return true
                 }
                 return isNewUrl(request?.url.toString())

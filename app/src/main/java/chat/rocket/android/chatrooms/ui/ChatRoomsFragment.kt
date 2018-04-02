@@ -236,6 +236,11 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
+
+        if (!newDataSet.isEmpty()){
+            web_links_expand_button.visibility = View.VISIBLE
+        }
+
         activity?.apply {
             listJob?.cancel()
             listJob = launch(UI) {
@@ -248,7 +253,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override fun showNoWebLinksToDisplay() {
-        //Do nothing
+        val adapter = web_links_recycler_view.adapter as WebLinksAdapter
+        adapter.clearData()
+        web_links_expand_button.visibility = View.GONE
+        divider_web_links.visibility = View.GONE
     }
 
     private fun setupToolbar() {

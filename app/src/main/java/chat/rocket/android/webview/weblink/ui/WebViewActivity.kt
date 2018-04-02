@@ -129,7 +129,7 @@ class WebViewActivity : AppCompatActivity() {
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                if (request?.url.toString().startsWith("https://www.google.com/search", ignoreCase = true))
+/*                if (request?.url.toString().startsWith("https://www.google.com/search", ignoreCase = true))
                     return false
                 if (request?.url.toString().startsWith("https://www.aa.com", ignoreCase = true)) {
                     val layout = LayoutInflater.from(view?.context).inflate(R.layout.custom_toast, findViewById(R.id.custom_toast_container))
@@ -141,7 +141,7 @@ class WebViewActivity : AppCompatActivity() {
                     toast.setView(layout)
                     toast.show()
                     return true
-                }
+                }*/
                 return isNewUrl(request?.url.toString())
             }
         }

@@ -171,8 +171,7 @@ class MessageParser @Inject constructor(
                                 Timber.d("$link")
                                 if (link.startsWith("http://www.requiresinternet.com")) {
                                     ToastHelper.showCustomToast(context,
-                                            "Can I help you get access to this content?",
-                                            this)
+                                            "Can I help you get access to this content?")
                                 } else {
                                     CustomTab.openCustomTab(context, getUri(link), WebViewFallback())
                                 }

@@ -287,8 +287,8 @@
     
     <!--Web links-->
     <string name="customtab_bookmark_label">Bookmark</string>
-    <string name="added_bookmark">Added bookmark</string>
-    <string name="removed_bookmark">Removed Bookmark</string>
+    <string name="added_bookmark">Added Favorite</string>
+    <string name="removed_bookmark">Removed Favorite</string>
     <string name="url_preview_image">Image</string>
     <string name="url_preview_title">Web chat</string>
     <string name="url_preview_description">Description</string>

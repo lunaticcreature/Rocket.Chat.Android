@@ -34,12 +34,19 @@ object CustomTabsHelper {
      */
     fun convertSchemeToLower(url: String): String {
 
-        val httpUrl = HttpUrl.parse(url)
-        val scheme = httpUrl?.scheme()?.toLowerCase()
+        val link = if (url.toLowerCase().matches("^\\w+?://.*".toRegex())) url else "http://" + url 
+
+        val httpUrl = HttpUrl.parse(link)
+
+        if (httpUrl != null) {
+            val scheme = httpUrl?.scheme()?.toLowerCase()
        
-        return httpUrl?.newBuilder()
-            ?.scheme(scheme)
-            ?.build().toString()
+            return httpUrl?.newBuilder()
+                ?.scheme(scheme)
+                ?.build().toString()
+        } else {
+            return link
+        }
     }
 
     /**

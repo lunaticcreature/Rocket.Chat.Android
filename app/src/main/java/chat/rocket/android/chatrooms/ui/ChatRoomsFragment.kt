@@ -351,6 +351,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
+
         if (!newDataSet.isEmpty()){
             web_links_expand_button.visibility = View.VISIBLE
         }

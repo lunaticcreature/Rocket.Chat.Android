@@ -193,7 +193,7 @@ object PushManager {
                     .setMessageNotification()
 
             //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Rocket.Chat"
+            val subText = "Veranda"
             if (subText.isNotEmpty()) {
                 builder.setSubText(subText)
             }
@@ -282,7 +282,7 @@ object PushManager {
             }
 
             //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Rocket.Chat"
+            val subText = "Veranda"
             if (subText.isNotEmpty()) {
                 builder.setSubText(subText)
             }
@@ -338,7 +338,7 @@ object PushManager {
                     .setMessageNotification()
 
             //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Rocket.Chat"
+            val subText = "Veranda"
             if (subText.isNotEmpty()) {
                 builder.setSubText(subText)
             }
@@ -400,7 +400,7 @@ object PushManager {
             }
 
             //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Rocket.Chat"
+            val subText = "Veranda"
             if (subText.isNotEmpty()) {
                 builder.setSubText(subText)
             }
@@ -496,7 +496,7 @@ object PushManager {
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val res = ctx.resources
         val smallIcon = res.getIdentifier(
-                "rocket_chat_notification", "drawable", ctx.packageName)
+                "ic_veranda_swing", "drawable", ctx.packageName)
         with(this, {
             setAutoCancel(true)
             setShowWhen(true)
@@ -532,7 +532,7 @@ object PushManager {
         val ctx = this.mContext
         val res = ctx.resources
         val smallIcon = res.getIdentifier(
-                "rocket_chat_notification", "drawable", ctx.packageName)
+                "ic_veranda_swing", "drawable", ctx.packageName)
         with(this, {
             setAutoCancel(true)
             setShowWhen(true)

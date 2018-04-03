@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Rocket.Chat</string>
+    <string name="app_name" translatable="false">Veranda</string>
 
     <!-- Titles -->
     <string name="title_sign_in_your_server">Sign in to your server</string>
@@ -128,9 +128,9 @@
     <string name="chatroom_header">Header</string>
 
     <!--ChatRooms Headers-->
-    <string name="header_channel">Channels</string>
-    <string name="header_private_groups">Private Groups</string>
-    <string name="header_direct_messages">Direct Messages</string>
+    <string name="header_channel">Public Rooms</string>
+    <string name="header_private_groups">Private Rooms</string>
+    <string name="header_direct_messages">Chats</string>
     <string name="header_live_chats">Live Chats</string>
     <string name="header_unknown">Unknown</string>
 
@@ -162,8 +162,8 @@
     
     <!--Web links-->
     <string name="customtab_bookmark_label">Bookmark</string>
-    <string name="added_bookmark">Added bookmark</string>
-    <string name="removed_bookmark">Removed Bookmark</string>
+    <string name="added_bookmark">Added Favorite</string>
+    <string name="removed_bookmark">Removed Favorite</string>
     <string name="url_preview_image">Image</string>
     <string name="url_preview_title">Web chat</string>
     <string name="url_preview_description">Description</string>

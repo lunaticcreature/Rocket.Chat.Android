@@ -67,13 +67,9 @@ class WebViewActivity : AppCompatActivity() {
         requireNotNull(webPageUrl) { "no web_page_url provided in Intent extras" }
 
         setupToolbar()
+        setupWebView()
 
         Slidr.attach(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupWebView()
     }
 
     override fun onBackPressed() {
@@ -130,13 +126,13 @@ class WebViewActivity : AppCompatActivity() {
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-/*                if (request?.url.toString().startsWith("https://www.google.com/search", ignoreCase = true))
+                if (request?.url.toString().startsWith("https://www.google.com/search", ignoreCase = true))
                     return false
                 if (request?.url.toString().startsWith("https://www.aa.com", ignoreCase = true)) {
                     ToastHelper.showCustomToast(view?.context,
                             "Can I help you get access to this content?")
                     return true
-                }*/
+                }
                 return isNewUrl(request?.url.toString())
             }
         }

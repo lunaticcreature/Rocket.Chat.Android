@@ -379,8 +379,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
                 link, text_link)
 
         web_search.setOnClickListener({
-            CustomTab.openCustomTab(context!!, link, WebViewFallback(), true)
-            //startActivity(this.activity?.webViewIntent(link, if (!title.isEmpty()) title else resources.getString(R.string.url_preview_title)))
+            //CustomTab.openCustomTab(context!!, link, WebViewFallback(), true)
+            startActivity(this.activity?.webViewIntent(link, if (!title.isEmpty()) title else resources.getString(R.string.url_preview_title)))
         })
 
         val linkPreviewCallback = object : LinkPreviewCallback {

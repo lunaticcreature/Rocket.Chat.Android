@@ -19,6 +19,8 @@ import android.widget.TextView
 import chat.rocket.android.R
 import chat.rocket.android.chatrooms.presentation.ChatRoomsPresenter
 import chat.rocket.android.chatrooms.presentation.ChatRoomsView
+import chat.rocket.android.customtab.CustomTab
+import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
 import chat.rocket.android.helper.SharedPreferenceHelper
@@ -236,7 +238,6 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
-
         if (!newDataSet.isEmpty()){
             web_links_expand_button.visibility = View.VISIBLE
         }
@@ -357,6 +358,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                 link, text_link)
 
         web_search.setOnClickListener({
+            //CustomTab.openCustomTab(context!!, link, WebViewFallback(), true)
             startActivity(this.activity?.webViewIntent(link, if (!title.isEmpty()) title else resources.getString(R.string.url_preview_title)))
         })
 

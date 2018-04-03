@@ -78,7 +78,7 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
         val serverToken = currentServer?.let { multiServerRepository.get(currentServer) }
         val settings = currentServer?.let { settingsRepository.get(currentServer) }
         if (currentServer != null && serverToken != null && settings != null) {
-            tokenRepository.save(Token(serverToken.userId, serverToken.authToken))
+            tokenRepository.save(Token(serverToken.userId, serverToken.authToken)   )
         }
     }
 

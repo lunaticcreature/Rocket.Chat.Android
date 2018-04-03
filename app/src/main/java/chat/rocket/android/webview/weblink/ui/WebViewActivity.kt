@@ -67,13 +67,9 @@ class WebViewActivity : AppCompatActivity() {
         requireNotNull(webPageUrl) { "no web_page_url provided in Intent extras" }
 
         setupToolbar()
+        setupWebView()
 
         Slidr.attach(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupWebView()
     }
 
     override fun onBackPressed() {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Rocket.Chat</string>
+    <string name="app_name" translatable="false">Veranda</string>
 
     <!-- Titles -->
     <string name="title_sign_in_your_server">Sign in to your server</string>

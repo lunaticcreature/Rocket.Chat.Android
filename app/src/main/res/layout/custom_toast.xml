@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/veraImg"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:adjustViewBounds="false"
         android:scaleType="fitStart"
         android:src="@drawable/ic_vera"></ImageView>
@@ -21,5 +21,5 @@
         android:layout_toRightOf="@+id/veraImg"
         android:gravity="center"
         android:textColor="#FFFFFF"
-        android:textSize="24dp" />
+        android:textSize="18dp" />
 </RelativeLayout>

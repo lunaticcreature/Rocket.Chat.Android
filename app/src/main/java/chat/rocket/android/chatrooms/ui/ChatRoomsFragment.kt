@@ -25,6 +25,7 @@ import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
 import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.room.weblink.WebLinkEntity
+import chat.rocket.android.infrastructure.LocalRepository
 import chat.rocket.android.server.domain.GetCurrentServerInteractor
 import chat.rocket.android.server.domain.SettingsRepository
 import chat.rocket.android.util.extensions.*
@@ -34,7 +35,7 @@ import chat.rocket.android.weblinks.ui.WebLinksAdapter
 import chat.rocket.android.webview.weblink.ui.webViewIntent
 import chat.rocket.android.widget.DividerItemDecoration
 import chat.rocket.common.model.RoomType
-import chat.rocket.core.internal.realtime.State
+import chat.rocket.core.internal.realtime.socket.model.State
 import chat.rocket.core.model.ChatRoom
 import com.facebook.drawee.view.SimpleDraweeView
 import com.leocardz.link.preview.library.LinkPreviewCallback
@@ -45,21 +46,18 @@ import kotlinx.android.synthetic.main.fragment_chat_rooms.*
 import kotlinx.android.synthetic.main.item_web_link.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.NonCancellable.isActive
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-
 class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
-    @Inject
-    lateinit var presenter: ChatRoomsPresenter
-    @Inject
-    lateinit var serverInteractor: GetCurrentServerInteractor
-    @Inject
-    lateinit var settingsRepository: SettingsRepository
-    @Inject
-    lateinit var webLinksPresenter: WebLinksPresenter
+    @Inject lateinit var presenter: ChatRoomsPresenter
+    @Inject lateinit var serverInteractor: GetCurrentServerInteractor
+    @Inject lateinit var settingsRepository: SettingsRepository
+    @Inject lateinit var localRepository: LocalRepository
+    @Inject lateinit var webLinksPresenter: WebLinksPresenter
 
     private lateinit var preferences: SharedPreferences
     private var searchView: SearchView? = null
@@ -126,9 +124,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         })
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_sort -> {
                 val dialogLayout = layoutInflater.inflate(R.layout.chatroom_sort_dialog, null)
                 val sortType = SharedPreferenceHelper.getInt(Constants.CHATROOM_SORT_TYPE_KEY, ChatRoomsSortOrder.ACTIVITY)
@@ -180,41 +177,57 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateChatRooms(newDataSet: List<ChatRoom>) {
-        activity?.apply {
-            listJob?.cancel()
-            listJob = launch(UI) {
-                val adapter = recycler_view.adapter as SimpleSectionedRecyclerViewAdapter
-                // FIXME https://fabric.io/rocketchat3/android/apps/chat.rocket.android.dev/issues/5a90d4718cb3c2fa63b3f557?time=last-seven-days
-                // TODO - fix this bug to reenable DiffUtil
-                val diff = async(CommonPool) {
-                    DiffUtil.calculateDiff(RoomsDiffCallback(adapter.baseAdapter.dataSet, newDataSet))
-                }.await()
+        listJob?.cancel()
+        listJob = ui {
+            val adapter = recycler_view.adapter as SimpleSectionedRecyclerViewAdapter
+            // FIXME https://fabric.io/rocketchat3/android/apps/chat.rocket.android/issues/5ac2916c36c7b235275ccccf
+            // TODO - fix this bug to re-enable DiffUtil
+            /*val diff = async(CommonPool) {
+                DiffUtil.calculateDiff(RoomsDiffCallback(adapter.baseAdapter.dataSet, newDataSet))
+            }.await()*/
 
-                if (isActive) {
-                    adapter.baseAdapter.updateRooms(newDataSet)
-                    diff.dispatchUpdatesTo(adapter)
+            if (isActive) {
+                adapter.baseAdapter.updateRooms(newDataSet)
+                // TODO - fix crash to re-enable diff.dispatchUpdatesTo(adapter)
+                adapter.notifyDataSetChanged()
 
-                    //Set sections always after data set is updated
-                    setSections()
-                }
+                //Set sections always after data set is updated
+                setSections()
             }
         }
     }
 
-    override fun showNoChatRoomsToDisplay() = text_no_data_to_display.setVisible(true)
+    override fun showNoChatRoomsToDisplay() {
+        ui { text_no_data_to_display.setVisible(true) }
+    }
 
-    override fun showLoading() = view_loading.setVisible(true)
+    override fun showLoading(){
+        ui { view_loading.setVisible(true) }
+    }
 
-    override fun hideLoading() = view_loading.setVisible(false)
+    override fun hideLoading() {
+        ui {
+            view_loading.setVisible(false)
+        }
+    }
 
-    override fun showMessage(resId: Int) = showToast(resId)
+    override fun showMessage(resId: Int) {
+        ui {
+            showToast(resId)
+        }
+    }
 
-    override fun showMessage(message: String) = showToast(message)
+    override fun showMessage(message: String) {
+        ui {
+            showToast(message)
+        }
+    }
 
     override fun showGenericErrorMessage() = showMessage(getString(R.string.msg_generic_error))
 
     override fun showConnectionState(state: State) {
-        activity?.apply {
+        Timber.d("Got new state: $state")
+        ui {
             connection_status_text.fadeIn()
             handler.removeCallbacks(dismissStatus)
             when (state) {
@@ -261,22 +274,25 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     private fun setupToolbar() {
-        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_chats)
+        (activity as AppCompatActivity?)?.supportActionBar?.title = getString(R.string.title_chats)
     }
 
     private fun setupRecyclerView() {
-        activity?.apply {
-            recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            recycler_view.addItemDecoration(DividerItemDecoration(this,
+        ui {
+            recycler_view.layoutManager = LinearLayoutManager(it, LinearLayoutManager.VERTICAL, false)
+            recycler_view.addItemDecoration(DividerItemDecoration(it,
                     resources.getDimensionPixelSize(R.dimen.divider_item_decorator_bound_start),
                     resources.getDimensionPixelSize(R.dimen.divider_item_decorator_bound_end)))
-            recycler_view.itemAnimator = DefaultItemAnimator() as RecyclerView.ItemAnimator?
+            recycler_view.itemAnimator = DefaultItemAnimator()
             // TODO - use a ViewModel Mapper instead of using settings on the adapter
 
-            val baseAdapter = ChatRoomsAdapter(this,
-                    settingsRepository.get(serverInteractor.get()!!)) { chatRoom -> presenter.loadChatRoom(chatRoom) }
+            val baseAdapter = ChatRoomsAdapter(it,
+                    settingsRepository.get(serverInteractor.get()!!), localRepository) {
+                chatRoom -> presenter.loadChatRoom(chatRoom)
+            }
 
-            sectionedAdapter = SimpleSectionedRecyclerViewAdapter(this, R.layout.item_chatroom_header, R.id.text_chatroom_header, baseAdapter!!)
+            sectionedAdapter = SimpleSectionedRecyclerViewAdapter(it,
+                    R.layout.item_chatroom_header, R.id.text_chatroom_header, baseAdapter)
             recycler_view.adapter = sectionedAdapter
         }
     }
@@ -391,10 +407,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                         SharedPreferenceHelper.putString("web_search_link", link)
                     }
                 }
-            }
-        }
 //        val textCrawler = TextCrawler()
 //        textCrawler.makePreview(linkPreviewCallback, link)
+            }
+        }
     }
 
     private fun updateUI(title: String, textViewTitle: TextView,

@@ -139,24 +139,10 @@
     <string name="status_authenticating">authenticating</string>
     <string name="status_disconnecting">disconnecting</string>
     <string name="status_waiting">connecting in %d seconds</string>
-
-    <string name="menu_chatroom_sort">Sort</string>
-    <string name="dialog_sort_title">Sort by</string>
-    <string name="dialog_sort_by_alphabet">Alphabetical</string>
-    <string name="dialog_sort_by_activity">Activity</string>
-    <string name="dialog_group_by_type">Group by type</string>
-    <string name="dialog_group_favourites">Group favourites</string>
     
     <!--Suggestions-->
     <string name="suggest_all_description">Notify all in this room</string>
     <string name="suggest_here_description">Notify active users in this room</string>
-
-    <!--ChatRooms Headers-->
-    <string name="header_channel">Public Rooms</string>
-    <string name="header_private_groups">Private Rooms</string>
-    <string name="header_direct_messages">Chats</string>
-    <string name="header_live_chats">Live Chats</string>
-    <string name="header_unknown">Unknown</string>
 
     <!-- Slash Commands -->
     <string name="Slash_Gimme_Description">Displays ༼ つ ◕_◕ ༽つ before your message</string>
@@ -191,7 +177,6 @@
     <string name="dialog_sort_by_activity">Activity</string>
     <string name="dialog_group_by_type">Group by type</string>
     <string name="dialog_group_favourites">Group favourites</string>
-    <string name="chatroom_header">Header</string>
 
     <!--ChatRooms Headers-->
     <string name="chatroom_header">Header</string>

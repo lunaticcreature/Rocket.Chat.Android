@@ -116,77 +116,12 @@ class PushManager @Inject constructor(
         }
     }
 
-    internal fun createGroupNotification(context: Context, lastPushMessage: PushMessage): Notification? {
-        with(lastPushMessage) {
-            if (host == null || message == null || title == null) {
-                return null
-            }
-            val id = lastPushMessage.notificationId.toInt()
-            val contentIntent = getContentIntent(context, id, lastPushMessage)
-            val deleteIntent = getDismissIntent(context, lastPushMessage)
-            val builder = NotificationCompat.Builder(context)
-                    .setWhen(createdAt)
-                    .setContentTitle(title.fromHtml())
-                    .setContentText(message.fromHtml())
-                    .setGroup(host)
-                    .setGroupSummary(true)
-                    .setContentIntent(contentIntent)
-                    .setDeleteIntent(deleteIntent)
-                    .setMessageNotification()
-
-            //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Veranda"
-            if (subText.isNotEmpty()) {
-                builder.setSubText(subText)
-            }
-
-            if (style == null || style == "inbox") {
-                val pushMessageList = hostToPushMessageList.get(host)
-
-                pushMessageList?.let {
-                    val messageCount = pushMessageList.size
-                    val summary = summaryText?.replace("%n%", messageCount.toString())
-                            ?.fromHtml() ?: "$messageCount new messages"
-                    builder.setNumber(messageCount)
-                    if (messageCount > 1) {
-                        val firstPush = pushMessageList[0]
-                        val singleConversation = pushMessageList.filter {
-                            firstPush.sender?.username != it.sender?.username
-                        }.isEmpty()
-
-                        val inbox = NotificationCompat.InboxStyle()
-                                .setBigContentTitle(if (singleConversation) title else summary)
-
-                        for (push in pushMessageList) {
-                            if (singleConversation) {
-                                inbox.addLine(push.message)
-                            } else {
-                                inbox.addLine("<font color='black'>${push.title}</font> <font color='gray'>${push.message}</font>".fromHtml())
-                            }
-                        }
-
-                        builder.setStyle(inbox)
-                    } else {
-                        val firstMsg = pushMessageList[0]
-                        if (firstMsg.host == null || firstMsg.message == null || firstMsg.title == null) {
-                            return null
-                        }
-                        val bigText = NotificationCompat.BigTextStyle()
-                                .bigText(firstMsg.message.fromHtml())
-                                .setBigContentTitle(firstMsg.title.fromHtml())
-
-                        builder.setStyle(bigText)
-                    }
-                }
-            } else {
-                val bigText = NotificationCompat.BigTextStyle()
-                        .bigText(message.fromHtml())
-                        .setBigContentTitle(title.fromHtml())
-
-                builder.setStyle(bigText)
-            }
-
-            return builder.build()
+    private fun getGroupForHost(host: String): TupleGroupIdMessageCount {
+        val size = groupedPushes.groupMap.size
+        var group = groupedPushes.groupMap[host]
+        if (group == null) {
+            group = TupleGroupIdMessageCount(size + 1, AtomicInteger(0))
+            groupedPushes.groupMap[host] = group
         }
         return group
     }
@@ -203,22 +138,6 @@ class PushManager @Inject constructor(
 
             val builder = createBaseNotificationBuilder(pushMessage, grouped = true)
                     .setGroupSummary(true)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder.setChannelId(host)
-                val groupChannel = NotificationChannel(host, host, NotificationManager.IMPORTANCE_HIGH)
-                groupChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                groupChannel.enableLights(false)
-                groupChannel.enableVibration(true)
-                groupChannel.setShowBadge(true)
-                manager.createNotificationChannel(groupChannel)
-            }
-
-            //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Veranda"
-            if (subText.isNotEmpty()) {
-                builder.setSubText(subText)
-            }
 
             if (style == null || style == "inbox") {
                 val pushMessageList = groupedPushes.hostToPushMessageList[host]
@@ -251,52 +170,6 @@ class PushManager @Inject constructor(
         }
     }
 
-    internal fun createSingleNotification(context: Context, lastPushMessage: PushMessage): Notification? {
-        with(lastPushMessage) {
-            if (host == null || message == null || title == null) {
-                return null
-            }
-            val id = notificationId.toInt()
-            val contentIntent = getContentIntent(context, id, lastPushMessage)
-            val deleteIntent = getDismissIntent(context, lastPushMessage)
-
-            val builder = NotificationCompat.Builder(context)
-                    .setWhen(createdAt)
-                    .setContentTitle(title.fromHtml())
-                    .setContentText(message.fromHtml())
-                    .setGroupSummary(false)
-                    .setGroup(host)
-                    .setDeleteIntent(deleteIntent)
-                    .setContentIntent(contentIntent)
-                    .setMessageNotification()
-
-            //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Veranda"
-            if (subText.isNotEmpty()) {
-                builder.setSubText(subText)
-            }
-
-            val pushMessageList = hostToPushMessageList.get(host)
-
-            pushMessageList?.let {
-                val lastPushMsg = pushMessageList.last()
-                if (lastPushMsg.host == null || lastPushMsg.message == null || lastPushMsg.title == null) {
-                    return null
-                }
-                if (pushMessageList.isNotEmpty()) {
-                    val messageCount = pushMessageList.size
-
-                    val bigText = NotificationCompat.BigTextStyle()
-                            .bigText(lastPushMsg.message.fromHtml())
-                            .setBigContentTitle(lastPushMsg.title.fromHtml())
-                    builder.setStyle(bigText).setNumber(messageCount)
-                }
-            }
-
-            return builder.build()
-        }
-    }
-
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createSingleNotification(pushMessage: PushMessage): Notification? {
@@ -305,22 +178,6 @@ class PushManager @Inject constructor(
 
             val builder = createBaseNotificationBuilder(pushMessage)
                     .setGroupSummary(false)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder.setChannelId(host)
-                val channel = NotificationChannel(host, host, NotificationManager.IMPORTANCE_HIGH)
-                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                channel.enableLights(false)
-                channel.enableVibration(true)
-                channel.setShowBadge(true)
-                manager.createNotificationChannel(channel)
-            }
-
-            //TODO: Get Site_Name PublicSetting from cache
-            val subText = "Veranda"
-            if (subText.isNotEmpty()) {
-                builder.setSubText(subText)
-            }
 
             if (style == null || "inbox" == style) {
                 val pushMessageList = groupedPushes.hostToPushMessageList.get(host)
@@ -399,7 +256,7 @@ class PushManager @Inject constructor(
 
     private fun getSiteName(host: String): String {
         val settings = getSettingsInteractor.get(host)
-        return settings.siteName() ?: "Rocket.Chat"
+        return settings.siteName() ?: "Veranda"
     }
 
     private fun getTitle(messageCount: Int, title: String): CharSequence {
@@ -443,20 +300,17 @@ class PushManager @Inject constructor(
         return this
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun Notification.Builder.setMessageNotification(ctx: Context): Notification.Builder {
-        val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val res = ctx.resources
-        val smallIcon = res.getIdentifier(
-                "ic_veranda_swing", "drawable", ctx.packageName)
-        with(this, {
-            setAutoCancel(true)
-            setShowWhen(true)
-            setColor(res.getColor(R.color.colorPrimary, ctx.theme))
-            setSmallIcon(smallIcon)
-            setSound(alarmSound)
-        })
-        return this
+    private fun getReplyIntent(pushMessage: PushMessage): Intent {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Intent(context, DirectReplyReceiver::class.java)
+        } else {
+            Intent(context, MainActivity::class.java).also {
+                it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }.also {
+            it.action = ACTION_REPLY
+            it.putExtra(EXTRA_PUSH_MESSAGE, pushMessage)
+        }
     }
 
     private fun getReplyPendingIntent(pushMessage: PushMessage): PendingIntent {
@@ -482,7 +336,7 @@ class PushManager @Inject constructor(
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val res = context.resources
         val smallIcon = res.getIdentifier(
-                "ic_veranda_swing", "drawable", ctx.packageName)
+                "rocket_chat_notification", "drawable", context.packageName)
         with(this, {
             setAutoCancel(true)
             setShowWhen(true)

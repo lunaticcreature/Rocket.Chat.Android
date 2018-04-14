@@ -19,13 +19,8 @@ import android.widget.TextView
 import chat.rocket.android.R
 import chat.rocket.android.chatrooms.presentation.ChatRoomsPresenter
 import chat.rocket.android.chatrooms.presentation.ChatRoomsView
-import chat.rocket.android.customtab.CustomTab
-import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
-import chat.rocket.android.helper.SharedPreferenceHelper
-import chat.rocket.android.customtab.CustomTab
-import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.infrastructure.LocalRepository
 import chat.rocket.android.room.weblink.WebLinkEntity
@@ -43,11 +38,9 @@ import chat.rocket.core.model.ChatRoom
 import com.facebook.drawee.view.SimpleDraweeView
 import com.leocardz.link.preview.library.LinkPreviewCallback
 import com.leocardz.link.preview.library.SourceContent
-import com.leocardz.link.preview.library.TextCrawler
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_chat_rooms.*
 import kotlinx.android.synthetic.main.item_web_link.*
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.NonCancellable.isActive
 import kotlinx.coroutines.experimental.android.UI
@@ -56,12 +49,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class ChatRoomsFragment : Fragment(), ChatRoomsView {
-    @Inject lateinit var presenter: ChatRoomsPresenter
-    @Inject lateinit var serverInteractor: GetCurrentServerInteractor
-    @Inject lateinit var settingsRepository: SettingsRepository
-    @Inject lateinit var localRepository: LocalRepository
-    @Inject lateinit var webLinksPresenter: WebLinksPresenter
+class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
+    @Inject
+    lateinit var presenter: ChatRoomsPresenter
+    @Inject
+    lateinit var serverInteractor: GetCurrentServerInteractor
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
+    @Inject
+    lateinit var localRepository: LocalRepository
+    @Inject
+    lateinit var webLinksPresenter: WebLinksPresenter
 
     private lateinit var preferences: SharedPreferences
     private var searchView: SearchView? = null
@@ -206,7 +204,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
         ui { text_no_data_to_display.setVisible(true) }
     }
 
-    override fun showLoading(){
+    override fun showLoading() {
         ui { view_loading.setVisible(true) }
     }
 
@@ -256,7 +254,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
-        if (!newDataSet.isEmpty()){
+        if (!newDataSet.isEmpty()) {
             web_links_expand_button.visibility = View.VISIBLE
         }
 
@@ -292,8 +290,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
             // TODO - use a ViewModel Mapper instead of using settings on the adapter
 
             val baseAdapter = ChatRoomsAdapter(it,
-                    settingsRepository.get(serverInteractor.get()!!), localRepository) {
-                chatRoom -> presenter.loadChatRoom(chatRoom)
+                    settingsRepository.get(serverInteractor.get()!!), localRepository) { chatRoom ->
+                presenter.loadChatRoom(chatRoom)
             }
 
             sectionedAdapter = SimpleSectionedRecyclerViewAdapter(it,

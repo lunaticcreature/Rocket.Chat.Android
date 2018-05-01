@@ -59,7 +59,6 @@ class WebViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
-        // DEBUG ear> disabling weblinks till fixed
         DaggerAppComponent.builder().application(RocketChatApplication.application).build().inject(this)
 
         webPageUrl = intent.getStringExtra(INTENT_WEB_PAGE_URL)

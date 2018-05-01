@@ -19,7 +19,6 @@ import chat.rocket.android.authentication.domain.model.toToken
 import chat.rocket.android.dagger.DaggerAppComponent
 import chat.rocket.android.helper.CrashlyticsTree
 import chat.rocket.android.infrastructure.LocalRepository
-import chat.rocket.android.room.weblink.WebLinkDao
 import chat.rocket.android.server.domain.*
 import chat.rocket.android.server.domain.model.Account
 import chat.rocket.android.util.extensions.avatarUrl

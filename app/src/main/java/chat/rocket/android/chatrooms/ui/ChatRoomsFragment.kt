@@ -91,16 +91,16 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         setupToolbar()
         setupRecyclerView()
         // DEBUG ear> disable weblinks till fixed
-        // setupWebLinksRecyclerView()
+        setupWebLinksRecyclerView()
         setupWebSearch()
-        // setupWebLinksExpandButton()
+        setupWebLinksExpandButton()
         presenter.loadChatRooms()
     }
 
     override fun onResume() {
         super.onResume()
         // DEBUG ear> disable weblinks till fixed
-        // webLinksPresenter.loadWebLinks()
+        webLinksPresenter.loadWebLinks()
     }
 
     override fun onDestroyView() {

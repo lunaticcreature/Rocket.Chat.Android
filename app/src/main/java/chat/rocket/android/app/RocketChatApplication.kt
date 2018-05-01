@@ -87,7 +87,7 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
         DaggerAppComponent.builder().application(this).build().inject(this)
         Stetho.initializeWithDefaults(this)
 
-        // application = this
+        application = this
 
         // TODO - remove this on the future, temporary migration stuff for pre-release versions.
         migrateInternalTokens()
@@ -267,6 +267,7 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
     }
 
     companion object {
+        lateinit var application: RocketChatApplication
         var context: WeakReference<Context>? = null
         fun getAppContext(): Context? {
             return context?.get()

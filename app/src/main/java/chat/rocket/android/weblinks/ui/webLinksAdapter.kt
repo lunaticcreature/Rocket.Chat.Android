@@ -104,7 +104,7 @@ class WebLinksAdapter(private val context: Context,
                 }
             }
             val textCrawler = TextCrawler()
-            textCrawler.makePreview(linkPreviewCallback, link)
+            textCrawler.makePreview(linkPreviewCallback, link, 1)
         }
 
         private fun updateUI(title: String, textViewTitle: TextView,

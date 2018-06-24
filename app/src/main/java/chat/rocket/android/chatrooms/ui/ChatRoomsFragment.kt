@@ -5,14 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -40,8 +36,6 @@ import chat.rocket.android.chatrooms.presentation.ChatRoomsView
 import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModel
 import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModelFactory
 import chat.rocket.android.db.DatabaseManager
-import chat.rocket.android.customtab.CustomTab
-import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
 import chat.rocket.android.helper.SharedPreferenceHelper
@@ -76,7 +70,6 @@ import com.leocardz.link.preview.library.TextCrawler
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_chat_rooms.*
 import kotlinx.android.synthetic.main.item_web_link.*
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -102,6 +95,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     private var searchView: SearchView? = null
     private val handler = Handler()
 
+    private var listJob: Job? = null
     private var chatRoomId: String? = null
 
     companion object {
@@ -135,9 +129,9 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? = container?.inflate(R.layout.fragment_chat_rooms)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -147,11 +141,9 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         subscribeUi()
 
         setupToolbar()
-        setupRecyclerView()
         setupWebLinksRecyclerView()
         setupWebSearch()
         setupWebLinksExpandButton()
-        presenter.loadChatRooms()
     }
 
     override fun onResume() {
@@ -221,7 +213,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // TODO - simplify this
+        // TODO - simplify this
             R.id.action_sort -> {
                 val dialogLayout = layoutInflater.inflate(R.layout.chatroom_sort_dialog, null)
                 val sortType = SharedPreferenceHelper.getInt(Constants.CHATROOM_SORT_TYPE_KEY, ChatRoomsSortOrder.ACTIVITY)
@@ -266,7 +258,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         val sortType = SharedPreferenceHelper.getInt(Constants.CHATROOM_SORT_TYPE_KEY, ChatRoomsSortOrder.ACTIVITY)
         val grouped = SharedPreferenceHelper.getBoolean(Constants.CHATROOM_GROUP_BY_TYPE_KEY, false)
 
-        val order = when(sortType) {
+        val order = when (sortType) {
             ChatRoomsSortOrder.ALPHABETICAL -> {
                 if (grouped) {
                     ChatRoomsRepository.Order.GROUPED_NAME
@@ -386,12 +378,12 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                     resources.getDimensionPixelSize(R.dimen.divider_item_decorator_bound_end)))
             web_links_recycler_view.itemAnimator = DefaultItemAnimator()
 
-            web_links_recycler_view.adapter = WebLinksAdapter(it,
-                { webLink ->
-                    run {
-                        startActivity(it.webViewIntent(webLink.link, if (!webLink.title.isEmpty()) webLink.title else resources.getString(R.string.url_preview_title)))
-                    }
-            })
+            web_links_recycler_view.adapter = WebLinksAdapter(it
+            ) { webLink ->
+                run {
+                    startActivity(it.webViewIntent(webLink.link, if (!webLink.title.isEmpty()) webLink.title else resources.getString(R.string.url_preview_title)))
+                }
+            }
         }
     }
 
@@ -422,10 +414,10 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                 imageUrl, image_web_link,
                 link, text_link)
 
-        web_search.setOnClickListener({
+        web_search.setOnClickListener {
             //CustomTab.openCustomTab(context!!, link, WebViewFallback(), true)
             startActivity(this.activity?.webViewIntent(link, if (!title.isEmpty()) title else resources.getString(R.string.url_preview_title)))
-        })
+        }
 
         val linkPreviewCallback = object : LinkPreviewCallback {
 

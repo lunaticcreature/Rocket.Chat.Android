@@ -108,7 +108,8 @@ ext {
 
             aVLoadingIndicatorView: "com.wang.avi:library:${versions.aVLoadingIndicatorView}",
 
-            customtab              : "com.android.support:customtabs:${versions.customtab}",
+            //Veranda
+            customtab              : "com.android.support:customtabs:${versions.support}",
             stetho                 : "com.facebook.stetho:stetho:${versions.stetho}",
             jsoup                  : "org.jsoup:jsoup:${versions.jsoup}",
             linkpreview            : "com.leocardz:link-preview:${versions.linkpreview}@aar",

@@ -80,9 +80,12 @@
             android:theme="@style/AppTheme.Translucent" />
 
         <activity
-            android:name=".chatroom.ui.ChatRoomActivity"
+            android:name=".chatroom.ui.PinnedMessagesActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".settings.password.ui.PasswordActivity"
+            android:theme="@style/AppTheme" />
 
         <!-- TODO: Change to fragment -->
         <activity
@@ -125,6 +128,7 @@
             android:value="12ac6e94f850aaffcdff52001af77ca415d06a43" />
 
         <receiver android:name=".customtab.ActionBroadcastReceiver" />
+
     </application>
 
 </manifest>

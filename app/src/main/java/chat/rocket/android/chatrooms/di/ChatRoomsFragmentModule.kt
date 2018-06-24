@@ -9,16 +9,14 @@ import chat.rocket.android.chatrooms.ui.ChatRoomsFragment
 import chat.rocket.android.dagger.scope.PerFragment
 import chat.rocket.android.db.ChatRoomDao
 import chat.rocket.android.db.DatabaseManager
-import chat.rocket.android.db.DatabaseManagerFactory
 import chat.rocket.android.infrastructure.LocalRepository
-import chat.rocket.android.server.domain.GetCurrentServerInteractor
 import chat.rocket.android.server.domain.PublicSettings
 import chat.rocket.android.server.domain.SettingsRepository
 import chat.rocket.android.server.infraestructure.ConnectionManager
 import chat.rocket.android.server.infraestructure.ConnectionManagerFactory
 import chat.rocket.android.server.infraestructure.RocketChatClientFactory
-import chat.rocket.core.RocketChatClient
 import chat.rocket.android.weblinks.presentation.WebLinksView
+import chat.rocket.core.RocketChatClient
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -45,22 +43,8 @@ class ChatRoomsFragmentModule {
 
     @Provides
     @PerFragment
-    @Named("currentServer")
-    fun provideCurrentServer(currentServerInteractor: GetCurrentServerInteractor): String {
-        return currentServerInteractor.get()!!
-    }
-
-    @Provides
-    @PerFragment
     fun provideRocketChatClient(factory: RocketChatClientFactory,
                                 @Named("currentServer") currentServer: String): RocketChatClient {
-        return factory.create(currentServer)
-    }
-
-    @Provides
-    @PerFragment
-    fun provideDatabaseManager(factory: DatabaseManagerFactory,
-                               @Named("currentServer") currentServer: String): DatabaseManager {
         return factory.create(currentServer)
     }
 

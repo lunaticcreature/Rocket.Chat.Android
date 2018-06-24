@@ -16,8 +16,6 @@ import android.text.style.ClickableSpan
 import android.text.style.ReplacementSpan
 import android.util.Patterns
 import android.view.View
-import android.view.LayoutInflater
-import android.view.Gravity
 import chat.rocket.android.R
 import chat.rocket.android.server.domain.PublicSettings
 import chat.rocket.android.server.domain.useRealName
@@ -30,7 +28,6 @@ import chat.rocket.core.model.Message
 import chat.rocket.android.chatroom.viewmodel.MessageViewModel
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
-import chat.rocket.android.helper.ToastHelper
 import chat.rocket.android.widget.emoji.EmojiParser
 import chat.rocket.android.widget.emoji.EmojiRepository
 import chat.rocket.android.widget.emoji.EmojiTypefaceSpan

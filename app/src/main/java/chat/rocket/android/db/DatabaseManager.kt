@@ -5,6 +5,7 @@ import chat.rocket.android.db.model.BaseUserEntity
 import chat.rocket.android.db.model.ChatRoomEntity
 import chat.rocket.android.db.model.UserEntity
 import chat.rocket.android.db.model.UserStatus
+import chat.rocket.android.room.weblink.WebLinkDao
 import chat.rocket.android.util.extensions.removeTrailingSlash
 import chat.rocket.android.util.extensions.userId
 import chat.rocket.common.model.BaseRoom
@@ -34,6 +35,7 @@ class DatabaseManager(val context: Application,
 
     fun chatRoomDao(): ChatRoomDao = database.chatRoomDao()
     fun userDao(): UserDao = database.userDao()
+    fun webLinkDao() : WebLinkDao = database.webLinkDao()
 
     suspend fun getRoom(id: String) = withContext(dbContext) {
         chatRoomDao().get(id)

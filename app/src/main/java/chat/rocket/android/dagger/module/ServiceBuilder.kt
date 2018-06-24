@@ -23,9 +23,6 @@ abstract class ServiceBuilder {
     @ContributesAndroidInjector(modules = [ActionBroadcastReceiverProvider::class])
     abstract fun bindActionBroadcastReceiver(): ActionBroadcastReceiver
 
-    @ContributesAndroidInjector(modules = [GcmListenerServiceProvider::class])
-    abstract fun bindGcmListenerService(): GcmListenerService
-
     @ContributesAndroidInjector(modules = [MessageServiceProvider::class])
     abstract fun bindMessageService(): MessageService
 }

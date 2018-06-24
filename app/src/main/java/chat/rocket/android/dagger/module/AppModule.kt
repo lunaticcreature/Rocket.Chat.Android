@@ -14,41 +14,19 @@ import chat.rocket.android.authentication.infraestructure.SharedPreferencesToken
 import chat.rocket.android.chatroom.service.MessageService
 import chat.rocket.android.dagger.qualifier.ForAuthentication
 import chat.rocket.android.dagger.qualifier.ForMessages
+import chat.rocket.android.db.DatabaseManager
+import chat.rocket.android.db.DatabaseManagerFactory
 import chat.rocket.android.helper.MessageParser
 import chat.rocket.android.infrastructure.LocalRepository
 import chat.rocket.android.infrastructure.SharedPreferencesLocalRepository
 import chat.rocket.android.push.GroupedPush
 import chat.rocket.android.push.PushManager
-import chat.rocket.android.server.domain.AccountsRepository
-import chat.rocket.android.server.domain.ActiveUsersRepository
-import chat.rocket.android.server.domain.ChatRoomsRepository
-import chat.rocket.android.server.domain.CurrentServerRepository
-import chat.rocket.android.server.domain.GetAccountInteractor
-import chat.rocket.android.server.domain.GetCurrentServerInteractor
-import chat.rocket.android.server.domain.GetSettingsInteractor
-import chat.rocket.android.server.domain.JobSchedulerInteractor
-import chat.rocket.android.server.domain.MessagesRepository
-import chat.rocket.android.server.domain.MultiServerTokenRepository
-import chat.rocket.android.server.domain.PermissionsRepository
-import chat.rocket.android.server.domain.RoomRepository
-import chat.rocket.android.server.domain.SettingsRepository
-import chat.rocket.android.server.domain.TokenRepository
-import chat.rocket.android.server.domain.UsersRepository
-import chat.rocket.android.server.infraestructure.JobSchedulerInteractorImpl
-import chat.rocket.android.server.infraestructure.MemoryActiveUsersRepository
-import chat.rocket.android.server.infraestructure.MemoryChatRoomsRepository
-import chat.rocket.android.server.infraestructure.MemoryRoomRepository
-import chat.rocket.android.server.infraestructure.MemoryUsersRepository
-import chat.rocket.android.server.infraestructure.SharedPreferencesAccountsRepository
-import chat.rocket.android.server.infraestructure.SharedPreferencesMessagesRepository
-import chat.rocket.android.server.infraestructure.SharedPreferencesPermissionsRepository
-import chat.rocket.android.server.infraestructure.SharedPreferencesSettingsRepository
-import chat.rocket.android.server.infraestructure.SharedPrefsConnectingServerRepository
-import chat.rocket.android.server.infraestructure.SharedPrefsCurrentServerRepository
+import chat.rocket.android.room.weblink.WebLinkDao
+import chat.rocket.android.server.domain.*
+import chat.rocket.android.server.infraestructure.*
 import chat.rocket.android.util.AppJsonAdapterFactory
 import chat.rocket.android.util.HttpLoggingInterceptor
 import chat.rocket.android.util.TimberLogger
-import chat.rocket.android.room.weblink.WebLinkDao
 import chat.rocket.common.internal.FallbackSealedClassJsonAdapter
 import chat.rocket.common.internal.ISO8601Date
 import chat.rocket.common.model.TimestampAdapter
@@ -69,6 +47,7 @@ import ru.noties.markwon.SpannableConfiguration
 import ru.noties.markwon.spans.SpannableTheme
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -82,20 +61,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideServerDao(database: RocketChatDatabase): ServerDao {
-        return database.serverDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideWebLinkDao(database: RocketChatDatabase): WebLinkDao {
-        return database.webLinkDao()
-    }
-
-    @Provides
-    @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor(object  : HttpLoggingInterceptor.Logger {
+        val interceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
                 Timber.d(message)
             }
@@ -114,11 +81,11 @@ class AppModule {
     @Singleton
     fun provideOkHttpClient(logger: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(logger)
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
-            .build()
+                .addInterceptor(logger)
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build()
     }
 
     @Provides
@@ -127,9 +94,26 @@ class AppModule {
         val listeners = setOf(RequestLoggingListener())
 
         return OkHttpImagePipelineConfigFactory.newBuilder(context, okHttpClient)
-            .setRequestListeners(listeners)
-            .setDownsampleEnabled(true)
-            .experiment().setPartialImageCachingEnabled(true).build()
+                .setRequestListeners(listeners)
+                .setDownsampleEnabled(true)
+                .experiment().setPartialImageCachingEnabled(true).build()
+    }
+
+    @Provides
+    fun provideWebLinkDao(database: DatabaseManager): WebLinkDao {
+        return database.webLinkDao()
+    }
+
+    @Provides
+    @Named("currentServer")
+    fun provideCurrentServer(currentServerInteractor: GetCurrentServerInteractor): String {
+        return currentServerInteractor.get()!!
+    }
+
+    @Provides
+    fun provideDatabaseManager(factory: DatabaseManagerFactory,
+                               @Named("currentServer") currentServer: String): DatabaseManager {
+        return factory.create(currentServer)
     }
 
     @Provides
@@ -153,13 +137,13 @@ class AppModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(context: Application) =
-        context.getSharedPreferences("rocket.chat", Context.MODE_PRIVATE)
+            context.getSharedPreferences("rocket.chat", Context.MODE_PRIVATE)
 
 
     @Provides
     @ForMessages
     fun provideMessagesSharedPreferences(context: Application) =
-        context.getSharedPreferences("messages", Context.MODE_PRIVATE)
+            context.getSharedPreferences("messages", Context.MODE_PRIVATE)
 
     @Provides
     @Singleton
@@ -212,26 +196,26 @@ class AppModule {
     @Provides
     @Singleton
     fun provideMoshi(
-        logger: PlatformLogger,
-        currentServerInteractor: GetCurrentServerInteractor
+            logger: PlatformLogger,
+            currentServerInteractor: GetCurrentServerInteractor
     ): Moshi {
         val url = currentServerInteractor.get() ?: ""
         return Moshi.Builder()
-            .add(FallbackSealedClassJsonAdapter.ADAPTER_FACTORY)
-            .add(AppJsonAdapterFactory.INSTANCE)
-            .add(AttachmentAdapterFactory(Logger(logger, url)))
-            .add(
-                java.lang.Long::class.java,
-                ISO8601Date::class.java,
-                TimestampAdapter(CalendarISO8601Converter())
-            )
-            .add(
-                Long::class.java,
-                ISO8601Date::class.java,
-                TimestampAdapter(CalendarISO8601Converter())
-            )
-            .add(ReactionsAdapter())
-            .build()
+                .add(FallbackSealedClassJsonAdapter.ADAPTER_FACTORY)
+                .add(AppJsonAdapterFactory.INSTANCE)
+                .add(AttachmentAdapterFactory(Logger(logger, url)))
+                .add(
+                        java.lang.Long::class.java,
+                        ISO8601Date::class.java,
+                        TimestampAdapter(CalendarISO8601Converter())
+                )
+                .add(
+                        Long::class.java,
+                        ISO8601Date::class.java,
+                        TimestampAdapter(CalendarISO8601Converter())
+                )
+                .add(ReactionsAdapter())
+                .build()
     }
 
     @Provides
@@ -259,10 +243,10 @@ class AppModule {
     fun provideConfiguration(context: Application): SpannableConfiguration {
         val res = context.resources
         return SpannableConfiguration.builder(context)
-            .theme(SpannableTheme.builder()
-                .linkColor(res.getColor(R.color.colorAccent))
-                .build())
-            .build()
+                .theme(SpannableTheme.builder()
+                        .linkColor(res.getColor(R.color.colorAccent))
+                        .build())
+                .build()
     }
 
     @Provides
@@ -274,11 +258,11 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAccountsRepository(preferences: SharedPreferences, moshi: Moshi): AccountsRepository =
-        SharedPreferencesAccountsRepository(preferences, moshi)
+            SharedPreferencesAccountsRepository(preferences, moshi)
 
     @Provides
     fun provideNotificationManager(context: Application) =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     @Provides
     @Singleton
@@ -287,12 +271,12 @@ class AppModule {
     @Provides
     @Singleton
     fun providePushManager(
-        context: Application,
-        groupedPushes: GroupedPush,
-        manager: NotificationManager,
-        moshi: Moshi,
-        getAccountInteractor: GetAccountInteractor,
-        getSettingsInteractor: GetSettingsInteractor): PushManager {
+            context: Application,
+            groupedPushes: GroupedPush,
+            manager: NotificationManager,
+            moshi: Moshi,
+            getAccountInteractor: GetAccountInteractor,
+            getSettingsInteractor: GetSettingsInteractor): PushManager {
         return PushManager(groupedPushes, manager, moshi, getAccountInteractor, getSettingsInteractor, context)
     }
 
@@ -304,9 +288,9 @@ class AppModule {
     @Provides
     fun provideSendMessageJob(context: Application): JobInfo {
         return JobInfo.Builder(MessageService.RETRY_SEND_MESSAGE_ID,
-            ComponentName(context, MessageService::class.java))
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-            .build()
+                ComponentName(context, MessageService::class.java))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .build()
     }
 
     @Provides

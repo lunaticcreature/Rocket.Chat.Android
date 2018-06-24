@@ -87,9 +87,6 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
             .addObserver(appLifecycleObserver)
 
         application = this
-
-        // TODO - remove this on the future, temporary migration stuff for pre-release versions.
-        migrateInternalTokens()
         context = WeakReference(applicationContext)
 
         AndroidThreeTen.init(this)
@@ -177,6 +174,3 @@ private fun LocalRepository.needOldMessagesCleanUp() = getBoolean(CLEANUP_OLD_ME
 private fun LocalRepository.setOldMessagesCleanedUp() = save(CLEANUP_OLD_MESSAGES_NEEDED, false)
 
 private const val CLEANUP_OLD_MESSAGES_NEEDED = "CLEANUP_OLD_MESSAGES_NEEDED"
-private fun LocalRepository.hasMigrated() = getBoolean(LocalRepository.MIGRATION_FINISHED_KEY)
-
-private const val INTERNAL_TOKEN_MIGRATION_NEEDED = "INTERNAL_TOKEN_MIGRATION_NEEDED"

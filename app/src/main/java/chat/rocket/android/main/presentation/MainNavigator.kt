@@ -1,10 +1,10 @@
 package chat.rocket.android.main.presentation
 
-import android.content.Context
 import chat.rocket.android.R
 import chat.rocket.android.authentication.ui.newServerIntent
 import chat.rocket.android.chatroom.ui.chatRoomIntent
 import chat.rocket.android.chatrooms.ui.ChatRoomsFragment
+import chat.rocket.android.createchannel.ui.CreateChannelFragment
 import chat.rocket.android.main.ui.MainActivity
 import chat.rocket.android.profile.ui.ProfileFragment
 import chat.rocket.android.server.ui.changeServerIntent
@@ -20,9 +20,15 @@ class MainNavigator(internal val activity: MainActivity) {
         }
     }
 
-    fun toChatList() {
+    fun toChatList(chatRoomId: String? = null) {
         activity.addFragment("ChatRoomsFragment", R.id.fragment_container) {
-            ChatRoomsFragment.newInstance()
+            ChatRoomsFragment.newInstance(chatRoomId)
+        }
+    }
+
+    fun toCreateChannel() {
+        activity.addFragment("CreateChannelFragment", R.id.fragment_container) {
+            CreateChannelFragment.newInstance()
         }
     }
 
@@ -38,19 +44,31 @@ class MainNavigator(internal val activity: MainActivity) {
         }
     }
 
-    fun toChatRoom(chatRoomId: String,
-                   chatRoomName: String,
-                   chatRoomType: String,
-                   isChatRoomReadOnly: Boolean,
-                   chatRoomLastSeen: Long,
-                   isChatRoomSubscribed: Boolean) {
-        activity.startActivity(activity.chatRoomIntent(chatRoomId, chatRoomName, chatRoomType,
-                isChatRoomReadOnly, chatRoomLastSeen, isChatRoomSubscribed))
+    fun toChatRoom(
+        chatRoomId: String,
+        chatRoomName: String,
+        chatRoomType: String,
+        isChatRoomReadOnly: Boolean,
+        chatRoomLastSeen: Long,
+        isChatRoomSubscribed: Boolean,
+        isChatRoomCreator: Boolean
+    ) {
+        activity.startActivity(
+            activity.chatRoomIntent(
+                chatRoomId,
+                chatRoomName,
+                chatRoomType,
+                isChatRoomReadOnly,
+                chatRoomLastSeen,
+                isChatRoomSubscribed,
+                isChatRoomCreator
+            )
+        )
         activity.overridePendingTransition(R.anim.open_enter, R.anim.open_exit)
     }
 
     fun toNewServer(serverUrl: String? = null) {
-        activity.startActivity(activity.changeServerIntent(serverUrl))
+        activity.startActivity(activity.changeServerIntent(serverUrl = serverUrl))
         activity.finish()
     }
 

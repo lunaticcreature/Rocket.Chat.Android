@@ -11,6 +11,10 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
+    <style name="ToolbarTheme" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="android:colorAccent">@color/colorLightTheme</item>
+    </style>
+
     <!--Translucent theme for Slider Activity-->
     <style name="AppTheme.Translucent" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>

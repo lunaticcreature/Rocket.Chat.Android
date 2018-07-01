@@ -47,9 +47,9 @@ class MainPresenter @Inject constructor(
     private val client: RocketChatClient = factory.create(currentServer)
     private var settings: PublicSettings = getSettingsInteractor.get(serverInteractor.get()!!)
 
-    fun toWebLinksList() = navigator.toWebLinksList()
+    private val userDataChannel = Channel<Myself>()
 
-    fun toChatList() = navigator.toChatList()
+    fun toWebLinksList() = navigator.toWebLinksList()
 
     fun toChatList(chatRoomId: String? = null) = navigator.toChatList(chatRoomId)
 

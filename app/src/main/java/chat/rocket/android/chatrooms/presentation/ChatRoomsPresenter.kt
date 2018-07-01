@@ -8,10 +8,6 @@ import chat.rocket.android.main.presentation.MainNavigator
 import chat.rocket.android.server.domain.SettingsRepository
 import chat.rocket.android.server.domain.useSpecialCharsOnRoom
 import chat.rocket.android.server.domain.useRealName
-import chat.rocket.android.helper.ChatRoomsSortOrder
-import chat.rocket.android.helper.Constants
-import chat.rocket.android.helper.SharedPreferenceHelper
-import chat.rocket.android.server.domain.*
 import chat.rocket.android.server.infraestructure.ConnectionManager
 import chat.rocket.android.util.extensions.launchUI
 import chat.rocket.android.util.retryIO
@@ -22,20 +18,12 @@ import chat.rocket.common.model.roomTypeOf
 import chat.rocket.core.internal.realtime.createDirectMessage
 import chat.rocket.core.internal.rest.me
 import chat.rocket.core.internal.model.Subscription
-import chat.rocket.core.internal.realtime.State
-import chat.rocket.core.internal.realtime.StreamMessage
-import chat.rocket.core.internal.realtime.Type
 import chat.rocket.core.model.ChatRoom
 import chat.rocket.core.model.Message
 import chat.rocket.core.model.Room
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.Channel
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.reflect.KProperty
-import kotlin.reflect.KProperty1
 
 class ChatRoomsPresenter @Inject constructor(
     private val view: ChatRoomsView,

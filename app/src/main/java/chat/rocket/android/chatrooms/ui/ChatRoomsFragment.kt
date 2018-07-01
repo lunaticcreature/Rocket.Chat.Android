@@ -1,7 +1,6 @@
 package chat.rocket.android.chatrooms.ui
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -17,17 +16,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.view.*
-import android.widget.CheckBox
-import android.widget.RadioGroup
-import android.widget.TextView
 import chat.rocket.android.R
 import chat.rocket.android.chatrooms.adapter.RoomsAdapter
 import chat.rocket.android.chatrooms.infrastructure.ChatRoomsRepository
@@ -38,21 +26,15 @@ import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModelFactory
 import chat.rocket.android.db.DatabaseManager
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
-import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.util.extensions.inflate
 import chat.rocket.android.util.extensions.showToast
 import chat.rocket.android.util.extensions.ui
 import chat.rocket.android.util.extensions.fadeIn
 import chat.rocket.android.util.extensions.fadeOut
-import chat.rocket.android.helper.ChatRoomsSortOrder
-import chat.rocket.android.helper.Constants
-import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.room.weblink.WebLinkEntity
-import chat.rocket.android.server.domain.GetCurrentServerInteractor
-import chat.rocket.android.server.domain.SettingsRepository
 import chat.rocket.android.util.extensions.*
 import chat.rocket.android.weblinks.presentation.WebLinksPresenter
 import chat.rocket.android.weblinks.presentation.WebLinksView
@@ -61,7 +43,6 @@ import chat.rocket.android.webview.weblink.ui.webViewIntent
 import chat.rocket.android.widget.DividerItemDecoration
 import chat.rocket.core.internal.realtime.socket.model.State
 import chat.rocket.common.model.RoomType
-import chat.rocket.core.internal.realtime.State
 import chat.rocket.core.model.ChatRoom
 import com.facebook.drawee.view.SimpleDraweeView
 import com.leocardz.link.preview.library.LinkPreviewCallback
@@ -213,7 +194,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-        // TODO - simplify this
+            // TODO - simplify this
             R.id.action_sort -> {
                 val dialogLayout = layoutInflater.inflate(R.layout.chatroom_sort_dialog, null)
                 val sortType = SharedPreferenceHelper.getInt(Constants.CHATROOM_SORT_TYPE_KEY, ChatRoomsSortOrder.ACTIVITY)
@@ -258,7 +239,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         val sortType = SharedPreferenceHelper.getInt(Constants.CHATROOM_SORT_TYPE_KEY, ChatRoomsSortOrder.ACTIVITY)
         val grouped = SharedPreferenceHelper.getBoolean(Constants.CHATROOM_GROUP_BY_TYPE_KEY, false)
 
-        val order = when (sortType) {
+        val order = when(sortType) {
             ChatRoomsSortOrder.ALPHABETICAL -> {
                 if (grouped) {
                     ChatRoomsRepository.Order.GROUPED_NAME
@@ -488,7 +469,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     private fun queryChatRoomsByName(name: String?): Boolean {
-        //presenter.chatRoomsByName(name ?: "")
+        presenter.chatRoomsByName(name ?: "")
         return true
     }
 }

@@ -6,11 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.net.Uri
-import android.os.Parcelable
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.text.Layout
-import android.text.Spannable
 import android.text.Spanned
 import android.text.style.ClickableSpan
 import android.text.style.ReplacementSpan
@@ -19,18 +14,13 @@ import android.view.View
 import chat.rocket.android.R
 import chat.rocket.android.server.domain.PublicSettings
 import chat.rocket.android.server.domain.useRealName
-import chat.rocket.android.util.extensions.openTabbedUrl
 import chat.rocket.android.emoji.EmojiParser
 import chat.rocket.android.emoji.EmojiRepository
 import chat.rocket.android.emoji.EmojiTypefaceSpan
 import chat.rocket.common.model.SimpleUser
 import chat.rocket.core.model.Message
-import chat.rocket.android.chatroom.viewmodel.MessageViewModel
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
-import chat.rocket.android.widget.emoji.EmojiParser
-import chat.rocket.android.widget.emoji.EmojiRepository
-import chat.rocket.android.widget.emoji.EmojiTypefaceSpan
 import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.Document
 import org.commonmark.node.Text
@@ -38,10 +28,9 @@ import ru.noties.markwon.Markwon
 import ru.noties.markwon.SpannableBuilder
 import ru.noties.markwon.SpannableConfiguration
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor
-import java.util.regex.Pattern
 import javax.inject.Inject
-import android.widget.TextView
-import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
+import timber.log.Timber
 
 class MessageParser @Inject constructor(
     private val context: Application,
@@ -170,7 +159,7 @@ class MessageParser @Inject constructor(
                                     ToastHelper.showCustomToast(context,
                                             "Can I help you get access to this content?")
                                 } else {
-                                    CustomTab.openCustomTab(context, getUri(link), WebViewFallback())
+                                    CustomTab.openCustomTab(context, getUri(link).toString(), WebViewFallback())
                                 }
                             }
                         }

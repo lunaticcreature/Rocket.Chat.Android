@@ -20,7 +20,7 @@ class MainNavigator(internal val activity: MainActivity) {
         }
     }
 
-    fun toChatList() {
+    fun toChatList(chatRoomId: String? = null) {
         activity.addFragment("ChatRoomsFragment", R.id.fragment_container) {
             ChatRoomsFragment.newInstance(chatRoomId)
         }

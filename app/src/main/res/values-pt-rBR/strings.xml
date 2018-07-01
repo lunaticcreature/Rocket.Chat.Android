@@ -262,15 +262,6 @@
     <string name="notif_action_reply_hint">RESPONDER</string>
     <string name="notif_error_sending">Falha ao enviar a mensagem.</string>
     <string name="notif_success_sending">Mensagem enviada para %1$s!</string>
-    
-
-    <string name="menu_chatroom_sort">Ordenar</string>
-    <string name="dialog_sort_title">Ordenar por</string>
-    <string name="dialog_sort_by_alphabet">Alfabeticamente</string>
-    <string name="dialog_sort_by_activity">Atividade</string>
-    <string name="dialog_group_by_type">Agrupar por tipo</string>
-    <string name="dialog_group_favourites">Grupos favoritos</string>
-    <string name="chatroom_header">Cabeçalho</string>
 
     <!--Web links-->
     <string name="customtab_bookmark_label">marca páginas</string>

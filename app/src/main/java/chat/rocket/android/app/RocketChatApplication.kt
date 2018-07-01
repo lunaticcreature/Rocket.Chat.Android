@@ -20,12 +20,6 @@ import chat.rocket.android.server.domain.GetSettingsInteractor
 import chat.rocket.android.server.domain.SITE_URL
 import chat.rocket.android.server.domain.TokenRepository
 import chat.rocket.android.emoji.EmojiRepository
-import chat.rocket.android.room.weblink.WebLinkDao
-import chat.rocket.android.server.domain.*
-import chat.rocket.android.server.domain.model.Account
-import chat.rocket.android.util.extensions.avatarUrl
-import chat.rocket.android.util.extensions.serverLogoUrl
-import chat.rocket.android.widget.emoji.EmojiRepository
 import chat.rocket.common.model.Token
 import chat.rocket.core.model.Value
 import com.crashlytics.android.Crashlytics

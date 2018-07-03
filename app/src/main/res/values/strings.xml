@@ -244,15 +244,6 @@
 
     <!-- Emoji message-->
     <string name="msg_no_recent_emoji">No recent emojis</string>
-    
-    <!--Web links-->
-    <string name="customtab_bookmark_label">Bookmark</string>
-    <string name="added_bookmark">Added Favorite</string>
-    <string name="removed_bookmark">Removed Favorite</string>
-    <string name="url_preview_image">Image</string>
-    <string name="url_preview_title">Web chat</string>
-    <string name="url_preview_description">Description</string>
-    <string name="url_preview_link">Link</string>
 
     <!--Notifications-->
     <string name="notif_action_reply_hint">REPLY</string>

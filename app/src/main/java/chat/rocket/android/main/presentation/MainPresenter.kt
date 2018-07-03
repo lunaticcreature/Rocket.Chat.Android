@@ -52,8 +52,6 @@ class MainPresenter @Inject constructor(
     fun toWebLinksList() = navigator.toWebLinksList()
 
     fun toChatList(chatRoomId: String? = null) = navigator.toChatList(chatRoomId)
-    
-    fun toWebLinksList() = navigator.toWebLinksList()
 
     fun toUserProfile() = navigator.toUserProfile()
 

@@ -469,7 +469,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     private fun queryChatRoomsByName(name: String?): Boolean {
-        presenter.chatRoomsByName(name ?: "")
+        //presenter.chatRoomsByName(name ?: "")
         return true
     }
 }

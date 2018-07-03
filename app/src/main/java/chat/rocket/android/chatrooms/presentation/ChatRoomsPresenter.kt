@@ -17,6 +17,10 @@ import chat.rocket.common.model.User
 import chat.rocket.common.model.roomTypeOf
 import chat.rocket.core.internal.realtime.createDirectMessage
 import chat.rocket.core.internal.rest.me
+import chat.rocket.core.internal.model.Subscription
+import chat.rocket.core.model.ChatRoom
+import chat.rocket.core.model.Message
+import chat.rocket.core.model.Room
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named

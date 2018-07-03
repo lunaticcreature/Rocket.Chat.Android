@@ -1,6 +1,7 @@
 package chat.rocket.android.dagger
 
 import android.app.Application
+import chat.rocket.android.app.AppLifecycleObserver
 import android.content.BroadcastReceiver
 import chat.rocket.android.app.RocketChatApplication
 import chat.rocket.android.chatroom.service.MessageService
@@ -40,6 +41,12 @@ interface AppComponent {
     fun inject(webViewActivity: WebViewActivity)
 
     fun inject(service: MessageService)
+
+    fun inject(broadcastReceiver: BroadcastReceiver)
+
+    fun inject(webLinksAdapter: WebLinksAdapter)
+
+    fun inject(webViewActivity: WebViewActivity)
 
     /*@Component.Builder
     abstract class Builder : AndroidInjector.Builder<RocketChatApplication>()*/

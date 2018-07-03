@@ -254,7 +254,11 @@
     <string name="url_preview_description">Description</string>
     <string name="url_preview_link">Link</string>
 
-    <!-- Sorting and grouping-->
+    <!--Notifications-->
+    <string name="notif_action_reply_hint">REPLY</string>
+    <string name="notif_error_sending">Reply has failed. Please try again.</string>
+    <string name="notif_success_sending">Message sent to %1$s!</string>
+    
     <string name="menu_chatroom_sort">Sort</string>
     <string name="dialog_sort_title">Sort by</string>
     <string name="dialog_sort_by_alphabet">Alphabetical</string>
@@ -269,9 +273,14 @@
     <string name="header_direct_messages">Direct Messages</string>
     <string name="header_live_chats">Live Chats</string>
     <string name="header_unknown">Unknown</string>
+    
+    <!--Web links-->
+    <string name="customtab_bookmark_label">Bookmark</string>
+    <string name="added_bookmark">Added Favorite</string>
+    <string name="removed_bookmark">Removed Favorite</string>
+    <string name="url_preview_image">Image</string>
+    <string name="url_preview_title">Web chat</string>
+    <string name="url_preview_description">Description</string>
+    <string name="url_preview_link">Link</string>
 
-    <!--Notifications-->
-    <string name="notif_action_reply_hint">REPLY</string>
-    <string name="notif_error_sending">Reply has failed. Please try again.</string>
-    <string name="notif_success_sending">Message sent to %1$s!</string>
 </resources>

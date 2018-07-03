@@ -49,6 +49,8 @@ class MainPresenter @Inject constructor(
 
     private val userDataChannel = Channel<Myself>()
 
+    fun toWebLinksList() = navigator.toWebLinksList()
+
     fun toChatList(chatRoomId: String? = null) = navigator.toChatList(chatRoomId)
     
     fun toWebLinksList() = navigator.toWebLinksList()

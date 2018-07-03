@@ -26,6 +26,13 @@ import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModelFactory
 import chat.rocket.android.db.DatabaseManager
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
+import chat.rocket.android.util.extensions.inflate
+import chat.rocket.android.util.extensions.showToast
+import chat.rocket.android.util.extensions.ui
+import chat.rocket.android.util.extensions.fadeIn
+import chat.rocket.android.util.extensions.fadeOut
+import chat.rocket.android.customtab.CustomTab
+import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.room.weblink.WebLinkEntity
 import chat.rocket.android.util.extensions.*
@@ -33,13 +40,9 @@ import chat.rocket.android.weblinks.presentation.WebLinksPresenter
 import chat.rocket.android.weblinks.presentation.WebLinksView
 import chat.rocket.android.weblinks.ui.WebLinksAdapter
 import chat.rocket.android.webview.weblink.ui.webViewIntent
-import chat.rocket.android.util.extensions.inflate
-import chat.rocket.android.util.extensions.showToast
-import chat.rocket.android.util.extensions.ui
-import chat.rocket.android.util.extensions.fadeIn
-import chat.rocket.android.util.extensions.fadeOut
 import chat.rocket.android.widget.DividerItemDecoration
 import chat.rocket.core.internal.realtime.socket.model.State
+import chat.rocket.common.model.RoomType
 import chat.rocket.core.model.ChatRoom
 import com.facebook.drawee.view.SimpleDraweeView
 import com.leocardz.link.preview.library.LinkPreviewCallback
@@ -129,6 +132,11 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         webLinksPresenter.loadWebLinks()
     }
 
+    override fun onDestroyView() {
+        listJob?.cancel()
+        super.onDestroyView()
+    }    
+        
     private fun subscribeUi() {
         ui {
 
@@ -316,7 +324,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
-        if (!newDataSet.isEmpty()) {
+
+        if (!newDataSet.isEmpty()){
             web_links_expand_button.visibility = View.VISIBLE
         }
 
@@ -422,8 +431,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                 }
             }
         }
-        val textCrawler = TextCrawler()
-        textCrawler.makePreview(linkPreviewCallback, link)
+//        val textCrawler = TextCrawler()
+//        textCrawler.makePreview(linkPreviewCallback, link)
     }
 
     private fun updateUI(title: String, textViewTitle: TextView,
@@ -460,7 +469,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     private fun queryChatRoomsByName(name: String?): Boolean {
-        //presenter.chatRoomsByName(name ?: "")
+        presenter.chatRoomsByName(name ?: "")
         return true
     }
 }

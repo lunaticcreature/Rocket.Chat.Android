@@ -157,7 +157,7 @@ class WebViewActivity : AppCompatActivity() {
         Observable.just(string)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Toast.makeText(RocketChatApplication.getAppContext(), string, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(RocketChatApplication.application.applicationContext, string, Toast.LENGTH_SHORT).show()
                 })
     }
 

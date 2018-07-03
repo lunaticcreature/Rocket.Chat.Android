@@ -20,6 +20,8 @@ import chat.rocket.android.server.domain.GetSettingsInteractor
 import chat.rocket.android.server.domain.SITE_URL
 import chat.rocket.android.server.domain.TokenRepository
 import chat.rocket.android.emoji.EmojiRepository
+import chat.rocket.common.model.Token
+import chat.rocket.core.model.Value
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.drawee.backends.pipeline.DraweeConfig
@@ -82,9 +84,12 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
             .inject(this)
         Stetho.initializeWithDefaults(this)
 
+        Stetho.initializeWithDefaults(this)
+
         ProcessLifecycleOwner.get()
             .lifecycle
             .addObserver(appLifecycleObserver)
+        application = this
 
         application = this
         context = WeakReference(applicationContext)
@@ -164,6 +169,7 @@ class RocketChatApplication : Application(), HasActivityInjector, HasServiceInje
     companion object {
         lateinit var application: RocketChatApplication
         var context: WeakReference<Context>? = null
+
         fun getAppContext(): Context? {
             return context?.get()
         }

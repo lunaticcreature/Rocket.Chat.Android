@@ -5,6 +5,8 @@ import chat.rocket.android.customtab.ActionBroadcastReceiverProvider
 import chat.rocket.android.chatroom.di.MessageServiceProvider
 import chat.rocket.android.chatroom.service.MessageService
 import chat.rocket.android.push.FirebaseMessagingService
+import chat.rocket.android.customtab.ActionBroadcastReceiver
+import chat.rocket.android.customtab.ActionBroadcastReceiverProvider
 import chat.rocket.android.push.FirebaseTokenService
 import chat.rocket.android.push.di.FirebaseMessagingServiceProvider
 import chat.rocket.android.push.di.FirebaseTokenServiceProvider
@@ -25,4 +27,7 @@ abstract class ServiceBuilder {
 
     @ContributesAndroidInjector(modules = [MessageServiceProvider::class])
     abstract fun bindMessageService(): MessageService
+
+    @ContributesAndroidInjector(modules = [ActionBroadcastReceiverProvider::class])
+    abstract fun bindActionBroadcastReceiver(): ActionBroadcastReceiver
 }

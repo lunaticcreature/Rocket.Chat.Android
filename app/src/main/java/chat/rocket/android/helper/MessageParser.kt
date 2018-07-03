@@ -15,6 +15,7 @@ import android.view.View
 import chat.rocket.android.R
 import chat.rocket.android.server.domain.PublicSettings
 import chat.rocket.android.server.domain.useRealName
+import chat.rocket.android.util.extensions.openTabbedUrl
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.widget.emoji.EmojiParser

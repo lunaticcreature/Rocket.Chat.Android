@@ -50,9 +50,14 @@ class RoomViewHolder(itemView: View, private val listener: (String) -> Unit) : V
                 text_total_unread_messages.isGone = true
             }
 
+            val layoutParams = image_chat_icon.layoutParams
             if (room.status != null && room.type is RoomType.DirectMessage) {
+                layoutParams.width = (12 * resources.displayMetrics.density).toInt()
+                image_chat_icon.layoutParams = layoutParams
                 image_chat_icon.setImageDrawable(getStatusDrawable(room.status))
             } else {
+                layoutParams.width = (24 * resources.displayMetrics.density).toInt()
+                image_chat_icon.layoutParams = layoutParams
                 image_chat_icon.setImageDrawable(getRoomDrawable(room.type, room.alert))
             }
 

@@ -39,6 +39,7 @@
     <string name="action_busy">Ocupado</string>
     <string name="action_invisible">Invisível</string>
     <string name="action_save_to_gallery">Salvar na galeria</string>
+    <string name="action_share">Compartilhar</string>
 
     <!-- Settings List -->
     <string-array name="settings_actions">
@@ -272,4 +273,6 @@
     <string name="url_preview_title">Web chat</string>
     <string name="url_preview_description">Descrição</string>
     <string name="url_preview_link">Ligação</string>
+
+    <string name="share_label">Digite compartilhar mensagem</string>
 </resources>

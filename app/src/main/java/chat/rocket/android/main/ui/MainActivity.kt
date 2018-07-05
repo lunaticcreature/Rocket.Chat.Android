@@ -214,6 +214,10 @@ class MainActivity : AppCompatActivity(), MainView, HasActivityInjector,
             R.id.action_settings -> {
                 presenter.toSettings()
             }
+            R.id.action_share -> {
+                presenter.share(this)
+                menuItem.isChecked = false
+            }
             R.id.action_logout -> {
                 presenter.logout()
             }

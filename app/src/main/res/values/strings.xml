@@ -39,6 +39,7 @@
     <string name="action_busy">Busy</string>
     <string name="action_invisible">Invisible</string>
     <string name="action_save_to_gallery">Save to gallery</string>
+    <string name="action_share">Share</string>
 
     <!-- Settings List -->
     <string-array name="settings_actions">
@@ -260,4 +261,6 @@
     <string name="notif_action_reply_hint">REPLY</string>
     <string name="notif_error_sending">Reply has failed. Please try again.</string>
     <string name="notif_success_sending">Message sent to %1$s!</string>
+
+    <string name="share_label">Type share message</string>
 </resources>

@@ -37,6 +37,12 @@
         android:checkableBehavior="single">
 
         <item
+            android:id="@+id/action_share"
+            android:checkable="false"
+            android:icon="@drawable/ic_share_black_24dp"
+            android:title="@string/action_share" />
+
+        <item
             android:id="@+id/action_logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="@string/action_logout" />

@@ -4,14 +4,14 @@ import DrawableHelper
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import chat.rocket.android.BuildConfig
 import chat.rocket.android.R
 import chat.rocket.android.main.adapter.AccountsAdapter
@@ -213,6 +213,10 @@ class MainActivity : AppCompatActivity(), MainView, HasActivityInjector,
             }
             R.id.action_settings -> {
                 presenter.toSettings()
+            }
+            R.id.action_share -> {
+                presenter.share(this)
+                menuItem.isChecked = false
             }
             R.id.action_logout -> {
                 presenter.logout()

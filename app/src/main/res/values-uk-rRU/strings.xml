@@ -38,6 +38,7 @@
     <string name="action_busy">Занят</string>
     <string name="action_invisible">Невидимый</string>
     <string name="action_save_to_gallery">Сохранить в галерею</string>
+    <string name="action_share">Поділитися</string>
 
     <!-- Settings List -->
     <string-array name="settings_actions">
@@ -257,4 +258,6 @@
     <string name="notif_action_reply_hint">ОТВЕТИТЬ</string>
     <string name="notif_error_sending">Ошибка ответа. Пожалуйста, попробуйте еще раз.</string>
     <string name="notif_success_sending">Сообщение отправлено %1$s!</string>
+
+    <string name="share_label">Введіть повідомлення про подію</string>
 </resources>

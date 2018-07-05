@@ -41,6 +41,7 @@
     <string name="action_invisible">Invisible</string>
     // TODO: Add proper translation.
     <string name="action_save_to_gallery">Save to gallery</string>
+    <string name="action_share">Compartir</string>
 
     <!-- Settings List -->
     <string-array name="settings_actions">
@@ -281,4 +282,6 @@
     <string name="notif_action_reply_hint">RESPUESTA</string>
     <string name="notif_error_sending">La respuesta ha fallado. Inténtalo de nuevo.</string>
     <string name="notif_success_sending">Mensaje enviado a %1$s!</string>
+
+    <string name="share_label">Tipo compartir mensaje</string>
 </resources>

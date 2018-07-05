@@ -1,5 +1,13 @@
 package chat.rocket.android.main.presentation
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
+import android.widget.EditText
+import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
+import chat.rocket.android.R
 import chat.rocket.android.core.lifecycle.CancelStrategy
 import chat.rocket.android.infrastructure.LocalRepository
 import chat.rocket.android.main.uimodel.NavHeaderUiModel
@@ -39,6 +47,7 @@ class MainPresenter @Inject constructor(
         private val getAccountsInteractor: GetAccountsInteractor,
         private val removeAccountInteractor: RemoveAccountInteractor,
         private val factory: RocketChatClientFactory,
+        private val getAccountInteractor: GetAccountInteractor,
         getSettingsInteractor: GetSettingsInteractor,
         managerFactory: ConnectionManagerFactory
 ) : CheckServerPresenter(strategy, factory, view = view) {
@@ -111,6 +120,41 @@ class MainPresenter @Inject constructor(
             } catch (ex: Exception) {
                 Timber.d(ex, "Error cleaning up the session...")
             }
+        }
+    }
+
+    /**
+     * Share
+     */
+    fun share(context: Context) {
+        launchUI(strategy) {
+
+            //get serverUrl and username
+            val server = serverInteractor.get()!!
+            val account = getAccountInteractor.get(server)!!
+            val userName = account.userName
+
+            val defaultMessage = "Hey! I’m on Rocket.Chat. \nMy username is “$userName” on server $server "
+
+            //Dialog
+            val layoutInflater = LayoutInflater.from(context)
+            val dialogLayout = layoutInflater.inflate(R.layout.share_dialog, null)
+            val editText = dialogLayout.findViewById<EditText>(R.id.share_text)
+            editText.setText(defaultMessage, TextView.BufferType.NORMAL)
+
+            AlertDialog.Builder(context)
+                    .setTitle(R.string.share_label)
+                    .setView(dialogLayout)
+                    .setPositiveButton(R.string.action_share) { dialog, _ ->
+                        dialog.dismiss()
+
+                        //intent
+                        val shareIntent = Intent()
+                        shareIntent.action = Intent.ACTION_SEND
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, editText.text.toString())
+                        shareIntent.type = "text/plain"
+                        startActivity(context, shareIntent, null)
+                    }.show()
         }
     }
 

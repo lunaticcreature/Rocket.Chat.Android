@@ -38,6 +38,7 @@
     <string name="action_busy">Ocupado</string>
     <string name="action_invisible">Invisível</string>
     <string name="action_save_to_gallery">Salvar na galeria</string>
+    <string name="action_share">Compartilhar</string>
 
     <!-- Settings List -->
     <string-array name="settings_actions">
@@ -261,4 +262,6 @@
     <string name="notif_action_reply_hint">RESPONDER</string>
     <string name="notif_error_sending">Falha ao enviar a mensagem.</string>
     <string name="notif_success_sending">Mensagem enviada para %1$s!</string>
+
+    <string name="share_label">Digite compartilhar mensagem</string>
 </resources>

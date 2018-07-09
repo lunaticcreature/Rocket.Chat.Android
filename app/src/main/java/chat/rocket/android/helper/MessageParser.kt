@@ -6,20 +6,20 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.net.Uri
-import androidx.core.content.res.ResourcesCompat
 import android.text.Spanned
 import android.text.style.ClickableSpan
 import android.text.style.ReplacementSpan
 import android.util.Patterns
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import chat.rocket.android.R
-import chat.rocket.android.server.domain.PublicSettings
-import chat.rocket.android.server.domain.useRealName
 import chat.rocket.android.customtab.CustomTab
 import chat.rocket.android.customtab.WebViewFallback
-import chat.rocket.android.widget.emoji.EmojiParser
-import chat.rocket.android.widget.emoji.EmojiRepository
-import chat.rocket.android.widget.emoji.EmojiTypefaceSpan
+import chat.rocket.android.emoji.EmojiParser
+import chat.rocket.android.emoji.EmojiRepository
+import chat.rocket.android.emoji.EmojiTypefaceSpan
+import chat.rocket.android.server.domain.PublicSettings
+import chat.rocket.android.server.domain.useRealName
 import chat.rocket.common.model.SimpleUser
 import chat.rocket.core.model.Message
 import org.commonmark.node.AbstractVisitor
@@ -30,8 +30,6 @@ import ru.noties.markwon.SpannableBuilder
 import ru.noties.markwon.SpannableConfiguration
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor
 import javax.inject.Inject
-import android.widget.TextView
-import android.widget.Toast
 
 class MessageParser @Inject constructor(
     private val context: Application,

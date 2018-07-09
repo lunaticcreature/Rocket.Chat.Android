@@ -18,6 +18,7 @@ import chat.rocket.android.infrastructure.checkIfMyself
 import chat.rocket.android.server.domain.PublicSettings
 import chat.rocket.android.server.domain.showLastMessage
 import chat.rocket.android.server.domain.useRealName
+import chat.rocket.android.server.domain.useSpecialCharsOnRoom
 import chat.rocket.android.util.extensions.*
 import chat.rocket.common.model.RoomType
 import chat.rocket.core.model.ChatRoom
@@ -91,15 +92,18 @@ class ChatRoomsAdapter(
 
         private fun bindIcon(chatRoom: ChatRoom, imageView: ImageView) {
             val drawable = when (chatRoom.type) {
-                is RoomType.Channel -> {
-                    DrawableHelper.getDrawableFromId(R.drawable.ic_megaphone, context)
-                }
-                is RoomType.PrivateGroup -> {
-                    DrawableHelper.getDrawableFromId(R.drawable.ic_community, context)
-                }
-                is RoomType.DirectMessage -> {
-                    DrawableHelper.getDrawableFromId(R.drawable.ic_sq_blank, context)
-                }
+                is RoomType.Channel -> DrawableHelper.getDrawableFromId(
+                    R.drawable.ic_megaphone_black,
+                    context
+                )
+                is RoomType.PrivateGroup -> DrawableHelper.getDrawableFromId(
+                    R.drawable.ic_community_black,
+                    context
+                )
+                is RoomType.DirectMessage -> DrawableHelper.getUserStatusDrawable(
+                    chatRoom.status,
+                    context
+                )
                 else -> null
             }
             drawable?.let {
@@ -120,7 +124,7 @@ class ChatRoomsAdapter(
         }
 
         private fun chatRoomName(chatRoom: ChatRoom): String {
-            return if (settings.useRealName()) {
+            return if (settings.useSpecialCharsOnRoom() || settings.useRealName()) {
                 chatRoom.fullName ?: chatRoom.name
             } else {
                 chatRoom.name

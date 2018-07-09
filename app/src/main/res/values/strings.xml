@@ -176,8 +176,17 @@
     <string name="permission_pinning_not_allowed">Pinning is not allowed</string>
     <string name="permission_starring_not_allowed">Starring is not allowed</string>
 
+    <!-- Favorite/Unfavorite chat room -->
+    <string name="title_favorite_chat">Favorite chat</string>
+    <string name="title_unfavorite_chat">Unfavorite chat</string>
+
     <!-- Members List -->
     <string name="title_members_list">Members</string>
+
+    <!-- Mentions -->
+    <string name="msg_mentions">Mentions</string>
+    <string name="msg_no_mention">No mention</string>
+    <string name="msg_all_the_mentions_appear_here">All the mentions\nappear here</string>
 
     <!-- Pinned Messages -->
     <string name="title_pinned_messages">Pinned Messages</string>
@@ -190,7 +199,7 @@
     <string name="no_favorite_description">All the favorite messages\nappear here</string>
 
     <!-- Files -->
-    <string name="msg_files">Files</string>
+    <string name="title_files">Files</string>
     <string name="title_files_total">Files (%d)</string>
     <string name="msg_no_files">No files</string>
     <string name="msg_all_files_appear_here">All the files appear here</string>
@@ -234,18 +243,13 @@
     <string name="Slash_Topic_Description">Set topic</string>
 
     <!-- Emoji message-->
-    <string name="msg_no_recent_emoji">No recent emoji</string>
-    
-    <!--Web links-->
-    <string name="customtab_bookmark_label">Bookmark</string>
-    <string name="added_bookmark">Added Favorite</string>
-    <string name="removed_bookmark">Removed Favorite</string>
-    <string name="url_preview_image">Image</string>
-    <string name="url_preview_title">Web chat</string>
-    <string name="url_preview_description">Description</string>
-    <string name="url_preview_link">Link</string>
+    <string name="msg_no_recent_emoji">No recent emojis</string>
 
-    <!-- Sorting and grouping-->
+    <!--Notifications-->
+    <string name="notif_action_reply_hint">REPLY</string>
+    <string name="notif_error_sending">Reply has failed. Please try again.</string>
+    <string name="notif_success_sending">Message sent to %1$s!</string>
+    
     <string name="menu_chatroom_sort">Sort</string>
     <string name="dialog_sort_title">Sort by</string>
     <string name="dialog_sort_by_alphabet">Alphabetical</string>
@@ -260,9 +264,14 @@
     <string name="header_direct_messages">Direct Messages</string>
     <string name="header_live_chats">Live Chats</string>
     <string name="header_unknown">Unknown</string>
+    
+    <!--Web links-->
+    <string name="customtab_bookmark_label">Bookmark</string>
+    <string name="added_bookmark">Added Favorite</string>
+    <string name="removed_bookmark">Removed Favorite</string>
+    <string name="url_preview_image">Image</string>
+    <string name="url_preview_title">Web chat</string>
+    <string name="url_preview_description">Description</string>
+    <string name="url_preview_link">Link</string>
 
-    <!--Notifications-->
-    <string name="notif_action_reply_hint">REPLY</string>
-    <string name="notif_error_sending">Reply has failed. Please try again.</string>
-    <string name="notif_success_sending">Message sent to %1$s!</string>
 </resources>

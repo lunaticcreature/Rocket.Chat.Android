@@ -41,12 +41,12 @@ import javax.inject.Inject
  * for old source code.
  */
 class PushManager @Inject constructor(
-    private val groupedPushes: GroupedPush,
-    private val manager: NotificationManager,
-    private val moshi: Moshi,
-    private val getAccountInteractor: GetAccountInteractor,
-    private val getSettingsInteractor: GetSettingsInteractor,
-    private val context: Context
+        private val groupedPushes: GroupedPush,
+        private val manager: NotificationManager,
+        private val moshi: Moshi,
+        private val getAccountInteractor: GetAccountInteractor,
+        private val getSettingsInteractor: GetSettingsInteractor,
+        private val context: Context
 ) {
 
     private val random = Random()
@@ -146,7 +146,7 @@ class PushManager @Inject constructor(
             val host = info.host
 
             val builder = createBaseNotificationBuilder(pushMessage, grouped = true)
-                .setGroupSummary(true)
+                    .setGroupSummary(true)
 
             if (style == null || style == "inbox") {
                 val pushMessageList = groupedPushes.hostToPushMessageList[host]
@@ -159,7 +159,7 @@ class PushManager @Inject constructor(
                     builder.setContentTitle(getTitle(count, title))
 
                     val inbox = NotificationCompat.InboxStyle()
-                        .setBigContentTitle(getTitle(count, title))
+                            .setBigContentTitle(getTitle(count, title))
 
                     for (push in pushMessageList) {
                         inbox.addLine(push.message)
@@ -169,8 +169,8 @@ class PushManager @Inject constructor(
                 }
             } else {
                 val bigText = NotificationCompat.BigTextStyle()
-                    .bigText(message.fromHtml())
-                    .setBigContentTitle(title.fromHtml())
+                        .bigText(message.fromHtml())
+                        .setBigContentTitle(title.fromHtml())
 
                 builder.setStyle(bigText)
             }
@@ -186,7 +186,7 @@ class PushManager @Inject constructor(
             val host = info.host
 
             val builder = createBaseNotificationBuilder(pushMessage)
-                .setGroupSummary(false)
+                    .setGroupSummary(false)
 
             if (style == null || "inbox" == style) {
                 val pushMessageList = groupedPushes.hostToPushMessageList.get(host)
@@ -212,19 +212,19 @@ class PushManager @Inject constructor(
                         builder.setStyle(inbox)
                     } else {
                         val bigTextStyle = NotificationCompat.BigTextStyle()
-                            .bigText(message.fromHtml())
+                                .bigText(message.fromHtml())
                         builder.setStyle(bigTextStyle)
                     }
                 } else {
                     // We don't know which kind of push is this - maybe a test push, so just show it
                     val bigTextStyle = NotificationCompat.BigTextStyle()
-                        .bigText(message.fromHtml())
+                            .bigText(message.fromHtml())
                     builder.setStyle(bigTextStyle)
                     return builder.build()
                 }
             } else {
                 val bigTextStyle = NotificationCompat.BigTextStyle()
-                    .bigText(message.fromHtml())
+                        .bigText(message.fromHtml())
                 builder.setStyle(bigTextStyle)
             }
 
@@ -241,13 +241,13 @@ class PushManager @Inject constructor(
             val deleteIntent = getDismissIntent(context, pushMessage)
 
             val builder = NotificationCompat.Builder(context, host)
-                .setWhen(info.createdAt)
-                .setContentTitle(title.fromHtml())
-                .setContentText(message.fromHtml())
-                .setGroup(host)
-                .setDeleteIntent(deleteIntent)
-                .setContentIntent(contentIntent)
-                .setMessageNotification()
+                    .setWhen(info.createdAt)
+                    .setContentTitle(title.fromHtml())
+                    .setContentText(message.fromHtml())
+                    .setGroup(host)
+                    .setDeleteIntent(deleteIntent)
+                    .setContentIntent(contentIntent)
+                    .setMessageNotification()
 
             if (host.isEmpty()) {
                 builder.setContentIntent(deleteIntent)
@@ -293,8 +293,8 @@ class PushManager @Inject constructor(
 
     private fun getDismissIntent(context: Context, pushMessage: PushMessage): PendingIntent {
         val deleteIntent = Intent(context, DeleteReceiver::class.java)
-            .putExtra(EXTRA_NOT_ID, pushMessage.notificationId.toInt())
-            .putExtra(EXTRA_HOSTNAME, pushMessage.info.host)
+                .putExtra(EXTRA_NOT_ID, pushMessage.notificationId.toInt())
+                .putExtra(EXTRA_HOSTNAME, pushMessage.info.host)
         return PendingIntent.getBroadcast(context, pushMessage.notificationId.toInt(), deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
@@ -316,13 +316,13 @@ class PushManager @Inject constructor(
     private fun NotificationCompat.Builder.addReplyAction(pushMessage: PushMessage): NotificationCompat.Builder {
         val replyTextHint = context.getText(R.string.notif_action_reply_hint)
         val replyRemoteInput = RemoteInput.Builder(REMOTE_INPUT_REPLY)
-            .setLabel(replyTextHint)
-            .build()
+                .setLabel(replyTextHint)
+                .build()
         val pendingIntent = getReplyPendingIntent(pushMessage)
         val replyAction = NotificationCompat.Action.Builder(R.drawable.ic_action_message_reply_24dp, replyTextHint, pendingIntent)
-            .addRemoteInput(replyRemoteInput)
-            .setAllowGeneratedReplies(true)
-            .build()
+                .addRemoteInput(replyRemoteInput)
+                .setAllowGeneratedReplies(true)
+                .build()
 
         this.addAction(replyAction)
         return this
@@ -345,17 +345,17 @@ class PushManager @Inject constructor(
         val replyIntent = getReplyIntent(pushMessage)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             PendingIntent.getBroadcast(
-                context,
-                random.nextInt(),
-                replyIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                    context,
+                    random.nextInt(),
+                    replyIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
             )
         } else {
             PendingIntent.getActivity(
-                context,
-                random.nextInt(),
-                replyIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                    context,
+                    random.nextInt(),
+                    replyIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
     }
@@ -378,25 +378,25 @@ class PushManager @Inject constructor(
 }
 
 data class PushMessage(
-    val title: String,
-    val message: String,
-    val info: PushInfo,
-    val image: String? = null,
-    val count: String? = null,
-    val notificationId: String,
-    val summaryText: String? = null,
-    val style: String? = null
+        val title: String,
+        val message: String,
+        val info: PushInfo,
+        val image: String? = null,
+        val count: String? = null,
+        val notificationId: String,
+        val summaryText: String? = null,
+        val style: String? = null
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readParcelable(PushMessage::class.java.classLoader),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString())
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readParcelable(PushMessage::class.java.classLoader),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(title)
@@ -426,11 +426,11 @@ data class PushMessage(
 
 @JsonSerializable
 data class PushInfo @KotshiConstructor constructor(
-    @Json(name = "host") val hostname: String,
-    @Json(name = "rid") val roomId: String,
-    val type: RoomType,
-    val name: String?,
-    val sender: PushSender?
+        @Json(name = "host") val hostname: String,
+        @Json(name = "rid") val roomId: String,
+        val type: RoomType,
+        val name: String?,
+        val sender: PushSender?
 ) : Parcelable {
     val createdAt: Long
         get() = System.currentTimeMillis()
@@ -439,11 +439,11 @@ data class PushInfo @KotshiConstructor constructor(
     }
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        roomTypeOf(parcel.readString()),
-        parcel.readString(),
-        parcel.readParcelable(PushInfo::class.java.classLoader))
+            parcel.readString(),
+            parcel.readString(),
+            roomTypeOf(parcel.readString()),
+            parcel.readString(),
+            parcel.readParcelable(PushInfo::class.java.classLoader))
 
     private fun sanitizeUrl(baseUrl: String): String {
         var url = baseUrl.trim()
@@ -468,7 +468,7 @@ data class PushInfo @KotshiConstructor constructor(
 
     companion object CREATOR : Parcelable.Creator<PushInfo> {
         val EMPTY = PushInfo(hostname = "", roomId = "", type = roomTypeOf(RoomType.CHANNEL), name = "",
-            sender = null)
+                sender = null)
 
         override fun createFromParcel(parcel: Parcel): PushInfo {
             return PushInfo(parcel)
@@ -482,14 +482,14 @@ data class PushInfo @KotshiConstructor constructor(
 
 @JsonSerializable
 data class PushSender @KotshiConstructor constructor(
-    @Json(name = "_id") val id: String,
-    val username: String?,
-    val name: String?
+        @Json(name = "_id") val id: String,
+        val username: String?,
+        val name: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString())
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)

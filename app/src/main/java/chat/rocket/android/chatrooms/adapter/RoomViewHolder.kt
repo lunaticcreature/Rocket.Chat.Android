@@ -14,10 +14,10 @@ import kotlinx.android.synthetic.main.unread_messages_badge.view.*
 class RoomViewHolder(itemView: View, private val listener: (String) -> Unit) : ViewHolder<RoomItemHolder>(itemView) {
 
     private val resources: Resources = itemView.resources
-    private val channelUnread: Drawable = resources.getDrawable(R.drawable.ic_hashtag_black_12dp)
-    private val channel: Drawable = resources.getDrawable(R.drawable.ic_hashtag_12dp)
-    private val groupUnread: Drawable = resources.getDrawable(R.drawable.ic_lock_black_12_dp)
-    private val group: Drawable = resources.getDrawable(R.drawable.ic_lock_12_dp)
+    private val channelUnread: Drawable = resources.getDrawable(R.drawable.ic_megaphone_black)
+    private val channel: Drawable = resources.getDrawable(R.drawable.ic_megaphone)
+    private val groupUnread: Drawable = resources.getDrawable(R.drawable.ic_community_black)
+    private val group: Drawable = resources.getDrawable(R.drawable.ic_community)
     private val online: Drawable = resources.getDrawable(R.drawable.ic_status_online_12dp)
     private val away: Drawable = resources.getDrawable(R.drawable.ic_status_away_12dp)
     private val busy: Drawable = resources.getDrawable(R.drawable.ic_status_busy_12dp)
@@ -50,9 +50,14 @@ class RoomViewHolder(itemView: View, private val listener: (String) -> Unit) : V
                 text_total_unread_messages.isGone = true
             }
 
+            val layoutParams = image_chat_icon.layoutParams
             if (room.status != null && room.type is RoomType.DirectMessage) {
+                layoutParams.width = (12 * resources.displayMetrics.density).toInt()
+                image_chat_icon.layoutParams = layoutParams
                 image_chat_icon.setImageDrawable(getStatusDrawable(room.status))
             } else {
+                layoutParams.width = (24 * resources.displayMetrics.density).toInt()
+                image_chat_icon.layoutParams = layoutParams
                 image_chat_icon.setImageDrawable(getRoomDrawable(room.type, room.alert))
             }
 

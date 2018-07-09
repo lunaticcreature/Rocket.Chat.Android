@@ -10,6 +10,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -25,6 +26,13 @@ import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModelFactory
 import chat.rocket.android.db.DatabaseManager
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
+import chat.rocket.android.util.extensions.inflate
+import chat.rocket.android.util.extensions.showToast
+import chat.rocket.android.util.extensions.ui
+import chat.rocket.android.util.extensions.fadeIn
+import chat.rocket.android.util.extensions.fadeOut
+import chat.rocket.android.customtab.CustomTab
+import chat.rocket.android.customtab.WebViewFallback
 import chat.rocket.android.helper.SharedPreferenceHelper
 import chat.rocket.android.room.weblink.WebLinkEntity
 import chat.rocket.android.util.extensions.*
@@ -34,6 +42,7 @@ import chat.rocket.android.weblinks.ui.WebLinksAdapter
 import chat.rocket.android.webview.weblink.ui.webViewIntent
 import chat.rocket.android.widget.DividerItemDecoration
 import chat.rocket.core.internal.realtime.socket.model.State
+import chat.rocket.common.model.RoomType
 import chat.rocket.core.model.ChatRoom
 import com.facebook.drawee.view.SimpleDraweeView
 import com.leocardz.link.preview.library.LinkPreviewCallback
@@ -123,6 +132,11 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         webLinksPresenter.loadWebLinks()
     }
 
+    override fun onDestroyView() {
+        listJob?.cancel()
+        super.onDestroyView()
+    }    
+        
     private fun subscribeUi() {
         ui {
 
@@ -164,7 +178,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
         inflater.inflate(R.menu.chatrooms, menu)
 
         val searchItem = menu.findItem(R.id.action_search)
-        searchView = searchItem?.actionView as SearchView
+        searchView = searchItem?.actionView as? SearchView
+        searchView?.setIconifiedByDefault(false)
         searchView?.maxWidth = Integer.MAX_VALUE
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -207,16 +222,14 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                     SharedPreferenceHelper.putBoolean(Constants.CHATROOM_GROUP_BY_TYPE_KEY, isChecked)
                 }
 
-                val dialogSort = AlertDialog.Builder(context)
-                        .setTitle(R.string.dialog_sort_title)
-                        .setView(dialogLayout)
-                        .setPositiveButton("Done") { dialog, _ ->
-                            invalidateQueryOnSearch()
-                            updateSort()
-                            dialog.dismiss()
-                        }
-
-                dialogSort.show()
+                AlertDialog.Builder(context)
+                    .setTitle(R.string.dialog_sort_title)
+                    .setView(dialogLayout)
+                    .setPositiveButton("Done") { dialog, _ ->
+                        invalidateQueryOnSearch()
+                        updateSort()
+                        dialog.dismiss()
+                    }.show()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -258,16 +271,16 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     override suspend fun updateChatRooms(newDataSet: List<ChatRoom>) {}
 
     override fun showNoChatRoomsToDisplay() {
-        ui { text_no_data_to_display.setVisible(true) }
+        ui { text_no_data_to_display.isVisible = true }
     }
 
     override fun showLoading() {
-        ui { view_loading.setVisible(true) }
+        ui { view_loading.isVisible = true }
     }
 
     override fun hideLoading() {
         ui {
-            view_loading.setVisible(false)
+            view_loading.isVisible = false
         }
     }
 
@@ -311,7 +324,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
     }
 
     override suspend fun updateWebLinks(newDataSet: List<WebLinkEntity>) {
-        if (!newDataSet.isEmpty()) {
+
+        if (!newDataSet.isEmpty()){
             web_links_expand_button.visibility = View.VISIBLE
         }
 
@@ -417,8 +431,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView, WebLinksView {
                 }
             }
         }
-        val textCrawler = TextCrawler()
-        textCrawler.makePreview(linkPreviewCallback, link)
+//        val textCrawler = TextCrawler()
+//        textCrawler.makePreview(linkPreviewCallback, link)
     }
 
     private fun updateUI(title: String, textViewTitle: TextView,

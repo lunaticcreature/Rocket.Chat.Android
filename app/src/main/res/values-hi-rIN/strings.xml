@@ -40,6 +40,7 @@
     <string name="action_busy">व्यस्त</string>
     <string name="action_invisible">अदृश्य</string>
     <string name="action_save_to_gallery">गैलरी में सहेजें</string>
+    <string name="action_share">शेयर</string>
 
     <!-- Settings List -->
     <string-array name="settings_actions">
@@ -266,4 +267,6 @@
     <string name="notif_action_reply_hint">जवाब</string>
     <string name="notif_error_sending">उत्तर विफल हुआ है। कृपया फिर से प्रयास करें।</string>
     <string name="notif_success_sending">संदेश भेजा गया %1$s!</string>
+
+    <string name="share_label">शेयर संदेश संपादित करें</string>
 </resources>

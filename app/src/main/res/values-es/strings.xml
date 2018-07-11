@@ -283,5 +283,5 @@
     <string name="notif_error_sending">La respuesta ha fallado. Inténtalo de nuevo.</string>
     <string name="notif_success_sending">Mensaje enviado a %1$s!</string>
 
-    <string name="share_label">Tipo compartir mensaje</string>
+    <string name="share_label">Editar mensaje compartido</string>
 </resources>

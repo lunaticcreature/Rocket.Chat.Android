@@ -274,5 +274,5 @@
     <string name="url_preview_description">Descrição</string>
     <string name="url_preview_link">Ligação</string>
 
-    <string name="share_label">Digite compartilhar mensagem</string>
+    <string name="share_label">Editar mensagem de compartilhamento</string>
 </resources>

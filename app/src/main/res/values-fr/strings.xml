@@ -284,5 +284,5 @@
     <string name="notif_error_sending">La réponse a échoué. Veuillez réessayer.</string>
     <string name="notif_success_sending">Message envoyé à %1$s!</string>
 
-    <string name="share_label">Type de message de partage</string>
+    <string name="share_label">Modifier le message partag</string>
 </resources>

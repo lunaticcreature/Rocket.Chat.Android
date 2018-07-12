@@ -73,11 +73,6 @@
             android:name=".webview.weblink.ui.WebViewActivity"
             android:theme="@style/AppTheme.Translucent"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-
-        <activity
-            android:name=".webview.weblink.ui.WebViewActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".settings.password.ui.PasswordActivity"
             android:theme="@style/AppTheme" />
@@ -92,10 +87,6 @@
             android:name=".chatroom.ui.PinnedMessagesActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-            
-        <activity
-            android:name=".settings.password.ui.PasswordActivity"
-            android:theme="@style/AppTheme" />
 
         <receiver
             android:name=".push.DirectReplyReceiver"

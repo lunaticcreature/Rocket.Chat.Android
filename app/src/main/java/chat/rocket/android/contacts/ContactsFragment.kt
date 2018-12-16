@@ -1,10 +1,13 @@
 package chat.rocket.android.contacts
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -22,6 +25,10 @@ import kotlin.collections.HashMap
 // WIDECHAT
 import chat.rocket.android.helper.Constants
 import com.facebook.drawee.view.SimpleDraweeView
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ShortDynamicLink
+import kotlinx.android.synthetic.main.fragment_contact_parent.view.*
 
 /**
  * Load a list of contacts in a recycler view
@@ -40,6 +47,7 @@ class ContactsFragment : Fragment() {
     private val MY_PERMISSIONS_REQUEST_RW_CONTACTS = 0
 
     private var createNewChannelLink: View? = null
+    private var shareViaAnotherApp: View? = null
     private var searchView: SearchView? = null
     private var sortView: MenuItem? = null
 
@@ -284,8 +292,38 @@ class ContactsFragment : Fragment() {
             transaction?.addToBackStack(null)?.commit();
         }
 
-        return view
-    }
+		shareViaAnotherApp = view.findViewById(R.id.share_via_another_app)
+		shareViaAnotherApp!!.setOnClickListener { _ ->
+
+			FirebaseDynamicLinks.getInstance().createDynamicLink()
+				.setLink(Uri.parse("https://open.rocket.chat/direct/Shailesh351"))
+				.setDomainUriPrefix("https://dylinktesting.page.link")
+				.setAndroidParameters(
+					DynamicLink.AndroidParameters.Builder("chat.veranda.android.dev").build())
+				.setSocialMetaTagParameters(
+					DynamicLink.SocialMetaTagParameters.Builder()
+						.setTitle("Shailesh351")
+						.setDescription("Chat with Shailesh on Rocket.Chat")
+						.build())
+				.buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT)
+				.addOnSuccessListener { result ->
+					val link = result.shortLink.toString()
+					Toast.makeText(context, link, Toast.LENGTH_SHORT).show()
+
+					val shareIntent = Intent()
+					shareIntent.action = Intent.ACTION_SEND
+					shareIntent.putExtra(Intent.EXTRA_TEXT, "Default Invitation Text : $link")
+					shareIntent.type = "text/plain"
+					startActivity(shareIntent, null)
+
+				}.addOnFailureListener {
+					// Error
+					Toast.makeText(context, "Error dynamic link", Toast.LENGTH_SHORT).show()
+				}
+		}
+
+		return view
+	}
 
     companion object {
 

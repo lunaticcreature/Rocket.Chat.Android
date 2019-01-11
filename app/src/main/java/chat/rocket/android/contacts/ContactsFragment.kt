@@ -17,6 +17,7 @@ import chat.rocket.android.contacts.models.Contact
 import chat.rocket.android.createchannel.ui.CreateChannelFragment
 import chat.rocket.android.main.ui.MainActivity
 import chat.rocket.android.util.extension.onQueryTextListener
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.app_bar.*
 import java.util.ArrayList
 import kotlin.Comparator
@@ -24,17 +25,28 @@ import kotlin.collections.HashMap
 
 // WIDECHAT
 import chat.rocket.android.helper.Constants
+import chat.rocket.android.server.domain.GetAccountInteractor
+import chat.rocket.android.server.domain.GetCurrentServerInteractor
 import com.facebook.drawee.view.SimpleDraweeView
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
 import kotlinx.android.synthetic.main.fragment_contact_parent.view.*
+import kotlinx.coroutines.experimental.launch
+import javax.inject.Inject
 
 /**
  * Load a list of contacts in a recycler view
  */
 class ContactsFragment : Fragment() {
-    /**
+
+	@Inject
+	lateinit var serverInteractor: GetCurrentServerInteractor
+
+	@Inject
+	lateinit var getAccountInteractor: GetAccountInteractor
+
+	/**
      * The list of contacts to load in the recycler view
      */
     private var contactArrayList: ArrayList<Contact> = ArrayList()
@@ -213,6 +225,7 @@ class ContactsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
 
         if (
@@ -295,31 +308,38 @@ class ContactsFragment : Fragment() {
 		shareViaAnotherApp = view.findViewById(R.id.share_via_another_app)
 		shareViaAnotherApp!!.setOnClickListener { _ ->
 
-			FirebaseDynamicLinks.getInstance().createDynamicLink()
-				.setLink(Uri.parse("https://open.rocket.chat/direct/Shailesh351"))
-				.setDomainUriPrefix("https://dylinktesting.page.link")
-				.setAndroidParameters(
-					DynamicLink.AndroidParameters.Builder("chat.veranda.android.dev").build())
-				.setSocialMetaTagParameters(
-					DynamicLink.SocialMetaTagParameters.Builder()
-						.setTitle("Shailesh351")
-						.setDescription("Chat with Shailesh on Rocket.Chat")
-						.build())
-				.buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT)
-				.addOnSuccessListener { result ->
-					val link = result.shortLink.toString()
-					Toast.makeText(context, link, Toast.LENGTH_SHORT).show()
+			launch {
+				//get serverUrl and username
+				val server = serverInteractor.get()!!
+				val account = getAccountInteractor.get(server)!!
+				val userName = account.userName
 
-					val shareIntent = Intent()
-					shareIntent.action = Intent.ACTION_SEND
-					shareIntent.putExtra(Intent.EXTRA_TEXT, "Default Invitation Text : $link")
-					shareIntent.type = "text/plain"
-					startActivity(shareIntent, null)
+				FirebaseDynamicLinks.getInstance().createDynamicLink()
+					.setLink(Uri.parse("$server/direct/$userName"))
+					.setDomainUriPrefix("https://dylinktesting.page.link")
+					.setAndroidParameters(
+						DynamicLink.AndroidParameters.Builder("chat.veranda.android.dev").build())
+					.setSocialMetaTagParameters(
+						DynamicLink.SocialMetaTagParameters.Builder()
+							.setTitle(userName)
+							.setDescription("Chat with $userName on Rocket.Chat")
+							.build())
+					.buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT)
+					.addOnSuccessListener { result ->
+						val link = result.shortLink.toString()
+						Toast.makeText(context, link, Toast.LENGTH_SHORT).show()
 
-				}.addOnFailureListener {
-					// Error
-					Toast.makeText(context, "Error dynamic link", Toast.LENGTH_SHORT).show()
-				}
+						val shareIntent = Intent()
+						shareIntent.action = Intent.ACTION_SEND
+						shareIntent.putExtra(Intent.EXTRA_TEXT, "Default Invitation Text : $link")
+						shareIntent.type = "text/plain"
+						startActivity(shareIntent, null)
+
+					}.addOnFailureListener {
+						// Error
+						Toast.makeText(context, "Error dynamic link", Toast.LENGTH_SHORT).show()
+					}
+			}
 		}
 
 		return view

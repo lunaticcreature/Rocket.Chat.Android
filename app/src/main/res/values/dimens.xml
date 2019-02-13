@@ -56,4 +56,9 @@
     <dimen name="circle_avatar_corner_radius">20dp</dimen>
     <dimen name="square_avatar_corner_radius">3dp</dimen>
 
+    <!--WIDECHAT FAB Menu-->
+    <dimen name="new_channel_translate">100dp</dimen>
+    <dimen name="new_group_translate">160dp</dimen>
+    <dimen name="new_chat_translate">220dp</dimen>
+
 </resources>

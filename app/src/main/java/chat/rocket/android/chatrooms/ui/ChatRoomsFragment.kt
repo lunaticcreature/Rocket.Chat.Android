@@ -54,7 +54,10 @@ import android.widget.*
 import androidx.core.view.isGone
 import chat.rocket.android.authentication.domain.model.DeepLinkInfo
 import chat.rocket.android.chatrooms.adapter.model.RoomUiModel
+import chat.rocket.android.contacts.ContactsFragment
+import chat.rocket.android.createchannel.ui.CreateChannelFragment
 import chat.rocket.android.helper.UserHelper
+import chat.rocket.android.newprivategroup.selectusers.ui.NewGroupSelectUsersFragment
 import chat.rocket.android.profile.ui.ProfileFragment
 import chat.rocket.android.server.domain.GetCurrentServerInteractor
 import chat.rocket.android.settings.ui.SettingsFragment
@@ -102,6 +105,8 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     private var currentlyConnected: Boolean? = false
 
     companion object {
+        private var isFABOpen: Boolean = false
+
         fun newInstance(chatRoomId: String? = null, deepLinkInfo: DeepLinkInfo? = null): ChatRoomsFragment {
             return ChatRoomsFragment().apply {
                 arguments = Bundle(1).apply {
@@ -250,7 +255,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
                 // to recreate the entire menu...
                 viewModel.showLastMessage = true
                 activity?.invalidateOptionsMenu()
-                create_new_channel_fab.isVisible = true
+                menu_fab.isVisible = true
                 queryChatRoomsByName(null)
                 return true
             }
@@ -258,7 +263,7 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 viewModel.showLastMessage = false
                 sortView?.isVisible = false
-                create_new_channel_fab.isVisible = false
+                menu_fab.isVisible = false
                 return true
             }
         }
@@ -532,14 +537,90 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
     }
 
     private fun setupFab() {
-        create_new_channel_fab.setOnClickListener { view ->
-            currentUserStatusIcon?.isGone = true
-            val contactsFragment = ContactsFragment()
-            val transaction = activity?.supportFragmentManager?.beginTransaction();
-            transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            transaction?.replace(this.id, contactsFragment, "contactsFragment");
-            transaction?.addToBackStack("contactsFragment")?.commit();
+        new_chat_fab_item.translationY = -resources.getDimension(R.dimen.new_chat_translate)
+        new_group_fab_item.translationY = -resources.getDimension(R.dimen.new_group_translate)
+        new_channel_fab_item.translationY = -resources.getDimension(R.dimen.new_channel_translate)
+
+        new_chat_fab_item.animateFABMenuItem(0F, 0F, 0F)
+        new_group_fab_item.animateFABMenuItem(0F, 0F, 0F)
+        new_channel_fab_item.animateFABMenuItem(0F, 0F, 0F)
+
+        menu_fab.setOnClickListener { view ->
+            when (isFABOpen) {
+                true -> hideFABMenu()
+                false -> showFABMenu()
+            }
         }
+
+        new_chat_fab_item.setOnClickListener {
+            hideFABMenu()
+            currentUserStatusIcon?.isGone = true
+            openFragment(ContactsFragment(), "contactsFragment")
+        }
+
+        new_chat_fab.setOnClickListener {
+            hideFABMenu()
+            currentUserStatusIcon?.isGone = true
+            openFragment(ContactsFragment(), "contactsFragment")
+        }
+
+        new_group_fab_item.setOnClickListener {
+            hideFABMenu()
+            openFragment(NewGroupSelectUsersFragment(), "newGroupSelectUsersFragemnt")
+        }
+
+        new_group_fab.setOnClickListener {
+            hideFABMenu()
+            openFragment(NewGroupSelectUsersFragment(), "newGroupSelectUsersFragemnt")
+        }
+
+        new_channel_fab_item.setOnClickListener {
+            hideFABMenu()
+            openFragment(CreateChannelFragment(), "createChannelFragment")
+        }
+
+        new_channel_fab.setOnClickListener {
+            hideFABMenu()
+            openFragment(CreateChannelFragment(), "createChannelFragment")
+        }
+
+        bg_fab_menu.setOnClickListener {
+            hideFABMenu()
+        }
+    }
+
+    private fun openFragment(fragment: Fragment, name: String) {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+        transaction?.replace(this.id, fragment, name)
+        transaction?.addToBackStack(name)?.commit()
+    }
+
+    private fun showFABMenu() {
+        isFABOpen = true
+
+        bg_fab_menu.visibility = View.VISIBLE
+        new_chat_fab_item.visibility = View.VISIBLE
+        new_group_fab_item.visibility = View.VISIBLE
+        new_channel_fab_item.visibility = View.VISIBLE
+
+        bg_fab_menu.animate().alpha(1F)
+        menu_fab.animate().rotation(135F)
+        new_chat_fab_item.animateFABMenuItem(-resources.getDimension(R.dimen.new_chat_translate), 1F, 1F)
+        new_group_fab_item.animateFABMenuItem(-resources.getDimension(R.dimen.new_group_translate), 1F, 1F)
+        new_channel_fab_item.animateFABMenuItem(-resources.getDimension(R.dimen.new_channel_translate), 1F, 1F)
+    }
+
+    private fun hideFABMenu() {
+        isFABOpen = false
+
+        bg_fab_menu.animate().alpha(0F)
+        bg_fab_menu.visibility = View.GONE
+
+        menu_fab.animate().rotation(0F)
+        new_chat_fab_item.animateFABMenuItem(0F, 0F, 0F)
+        new_group_fab_item.animateFABMenuItem(0F, 0F, 0F)
+        new_channel_fab_item.animateFABMenuItem(0F, 0F, 0F)
     }
 
     fun processDeepLink(deepLinkInfo: DeepLinkInfo) {

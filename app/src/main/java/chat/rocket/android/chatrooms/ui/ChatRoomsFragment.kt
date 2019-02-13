@@ -1,5 +1,6 @@
 package chat.rocket.android.chatrooms.ui
 
+import android.animation.Animator
 import androidx.appcompat.app.AlertDialog
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -618,9 +619,26 @@ class ChatRoomsFragment : Fragment(), ChatRoomsView {
         bg_fab_menu.visibility = View.GONE
 
         menu_fab.animate().rotation(0F)
-        new_chat_fab_item.animateFABMenuItem(0F, 0F, 0F)
         new_group_fab_item.animateFABMenuItem(0F, 0F, 0F)
         new_channel_fab_item.animateFABMenuItem(0F, 0F, 0F)
+        new_chat_fab_item.animateFABMenuItem(0F, 0F, 0F,
+            FABAnimatorListener(listOf(new_chat_fab_item, new_group_fab_item, new_channel_fab_item)))
+    }
+
+    class FABAnimatorListener(val views: List<View>) : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animator: Animator?) {}
+
+        override fun onAnimationEnd(animator: Animator?) {
+            if(!ChatRoomsFragment.isFABOpen){
+                views.forEach {
+                    it.visibility = View.GONE
+                }
+            }
+        }
+
+        override fun onAnimationStart(animator: Animator?) {}
+
+        override fun onAnimationCancel(animator: Animator?) {}
     }
 
     fun processDeepLink(deepLinkInfo: DeepLinkInfo) {

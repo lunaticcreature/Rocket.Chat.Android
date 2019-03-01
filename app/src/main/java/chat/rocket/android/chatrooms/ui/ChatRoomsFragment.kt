@@ -29,7 +29,6 @@ import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModel
 import chat.rocket.android.chatrooms.viewmodel.ChatRoomsViewModelFactory
 import chat.rocket.android.chatrooms.viewmodel.LoadingState
 import chat.rocket.android.chatrooms.viewmodel.Query
-import chat.rocket.android.contacts.ui.ContactsFragment
 import chat.rocket.android.helper.ChatRoomsSortOrder
 import chat.rocket.android.helper.Constants
 import chat.rocket.android.helper.SharedPreferenceHelper
@@ -55,7 +54,7 @@ import android.widget.*
 import androidx.core.view.isGone
 import chat.rocket.android.authentication.domain.model.DeepLinkInfo
 import chat.rocket.android.chatrooms.adapter.model.RoomUiModel
-import chat.rocket.android.contacts.ContactsFragment
+import chat.rocket.android.contacts.ui.ContactsFragment
 import chat.rocket.android.createchannel.ui.CreateChannelFragment
 import chat.rocket.android.helper.UserHelper
 import chat.rocket.android.newprivategroup.selectusers.ui.NewGroupSelectUsersFragment
